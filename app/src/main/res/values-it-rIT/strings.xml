@@ -1,0 +1,18 @@
+<resources>
+    <string name="action_save">Salva</string>
+    <string name="input_amount">Ammontare</string>
+    <string name="input_category">Categoria</string>
+    <string name="navigation_drawer_home">Home</string>
+    <string name="navigation_drawer_open">Apri il menù di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi il menù di navigazione</string>
+    <string name="navigation_drawer_settings">Impostazioni</string>
+    <string name="navigation_drawer_categories">Categorie</string>
+    <string name="title_activity_add_record">Registra movimento</string>
+    <string name="snackbar_record_saved">Movimento salvato</string>
+    <string name="title_balance">Saldo</string>
+    <string name="title_expense">Spese</string>
+    <string name="today">Oggi</string>
+    <string name="yesterday">Ieri</string>
+    <string name="this_week">Questa settimana</string>
+    <string name="this_month">Questo mese</string>
+</resources>

@@ -1,16 +1,9 @@
 package com.franksacco.wallet.database;
 
-/**
- *
- */
-class Database {
+public class Database {
 
-    private static final Database ourInstance = new Database();
+    public static final int DATABASE_VERSION = 1;
 
-    static Database getInstance() {
-        return ourInstance;
-    }
+    public static final String DATABASE_NAME = "database.db";
 
-    private Database() {
-    }
 }

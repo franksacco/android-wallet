@@ -1,18 +1,55 @@
 <resources>
-    <string name="action_save">Salva</string>
-    <string name="input_amount">Ammontare</string>
-    <string name="input_category">Categoria</string>
-    <string name="navigation_drawer_home">Home</string>
-    <string name="navigation_drawer_open">Apri il menù di navigazione</string>
-    <string name="navigation_drawer_close">Chiudi il menù di navigazione</string>
-    <string name="navigation_drawer_settings">Impostazioni</string>
-    <string name="navigation_drawer_categories">Categorie</string>
-    <string name="title_activity_add_record">Registra movimento</string>
-    <string name="snackbar_record_saved">Movimento salvato</string>
-    <string name="title_balance">Saldo</string>
-    <string name="title_expense">Spese</string>
-    <string name="today">Oggi</string>
+    <!-- Words without context -->
     <string name="yesterday">Ieri</string>
     <string name="this_week">Questa settimana</string>
     <string name="this_month">Questo mese</string>
+    <string name="today">Oggi</string>
+    <string name="save">Salva</string>
+
+    <!-- Drawer & Navigation -->
+    <string name="drawer_open">Apri il menù di navigazione</string>
+    <string name="drawer_close">Chiudi il menù di navigazione</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_transactions">Transazioni</string>
+    <string name="navigation_categories">Categorie</string>
+    <string name="navigation_settings">Impostazioni</string>
+
+    <!-- Home -->
+    <string name="title_balance">Saldo</string>
+    <string name="title_expense">Spese</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Categorie</string>
+    <string name="addCategory_dialog_title">Nuova categoria</string>
+    <string name="addCategory_input_name_hint">Nome</string>
+    <string name="addCategory_ok">Categoria aggiunta</string>
+    <string name="addCategory_error">Errore durante l\'inserimento della categoria</string>
+
+    <!-- Add transaction -->
+    <string name="addTransaction_title">Aggiungi transazione</string>
+    <string name="confirmExit_dialog_title">Non salvare le modifiche?</string>
+    <string name="addTransaction_input_amount_hint">Ammontare</string>
+    <string name="addTransaction_input_category_hint">Categoria</string>
+    <string name="addTransaction_input_date_hint">Data</string>
+    <string name="addTransaction_input_note_hint">Note</string>
+    <string name="addTransaction_ok">Transazione salvata</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_currency_list_title">Valuta preferita</string>
+    <string name="settings_currency_title">Valuta</string>
+    <string-array name="settings_currency_list_titles">
+        <item>EUR - Euro</item>
+        <item>USD - Dollaro americano</item>
+        <item>JPY - Yen giapponese</item>
+        <item>…</item>
+    </string-array>
+    <string name="settings_currency_update_title">Ultimo aggiornamento dei tassi di cambio</string>
+    <string name="settings_data_title">Gestione dati</string>
+    <string name="settings_data_deleteAll_title">Cancella tutti i dati salvati</string>
+    <string name="settings_data_deleteAll_description">Tutti i movimenti, statistiche o preferenze verrano eliminati da questo dispositivo</string>
+    <string name="dialog_confirmDelete_title">Elimina tutti i dati</string>
+    <string name="dialog_confirmDelete_description">Tutti i dati o preferenze dell\'applicazione verranno eliminati da questo dispositivo. Questa azione non può essere annullata.</string>
+    <string name="deleteAll_ok">Tutti i dati sono stati eliminati</string>
+
 </resources>

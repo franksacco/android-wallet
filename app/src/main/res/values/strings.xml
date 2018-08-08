@@ -1,21 +1,66 @@
 <resources>
-    <string name="app_name" translatable="false">Wallet</string>
-    <string name="action_save">Save</string>
-    <string name="input_amount">Amount</string>
-    <string name="input_category">Category</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_desc" translatable="false">App logo</string>
-    <string name="navigation_drawer_home">Home</string>
-    <string name="navigation_drawer_settings">Settings</string>
-    <string name="navigation_drawer_categories">Categories</string>
-    <string name="title_activity_add_record">Add record</string>
-    <string name="snackbar_record_saved">Record saved</string>
-    <string name="title_balance">Balance</string>
-    <string name="title_expense">Expense</string>
-    <string name="undefined" translatable="false">- -</string>
-    <string name="today">Today</string>
+    <!-- General -->
+    <string name="app_name" translatable="false">MyWallet</string>
+
+    <!-- Words without context -->
     <string name="yesterday">Yesterday</string>
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
+    <string name="today">Today</string>
+    <string name="save">Save</string>
+    <string name="undefined" translatable="false">- -</string>
+
+    <!-- Drawer & Navigation -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_logo" translatable="false">App logo</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_transactions">Transactions</string>
+    <string name="navigation_categories">Categories</string>
+    <string name="navigation_settings">Settings</string>
+
+    <!-- Home -->
+    <string name="title_balance">Balance</string>
+    <string name="title_expense">Expense</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Categories</string>
+    <string name="addCategory_dialog_title">Add category</string>
+    <string name="addCategory_input_name_hint">Name</string>
+    <string name="addCategory_ok">Category added</string>
+    <string name="addCategory_error">Error during category adding</string>
+
+    <!-- Add transaction -->
+    <string name="addTransaction_title">Add transaction</string>
+    <string name="confirmExit_dialog_title">Discard changes?</string>
+    <string name="addTransaction_input_amount_hint">Amount</string>
+    <string name="addTransaction_input_category_hint">Category</string>
+    <string name="addTransaction_input_date_hint">Date</string>
+    <string name="addTransaction_input_note_hint">Note</string>
+    <string name="addTransaction_ok">Transaction saved</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_currency_title">Currency</string>
+    <string name="settings_currency_list_title">Preferred currency</string>
+    <string-array name="settings_currency_list_titles">
+        <item>EUR - Euro</item>
+        <item>USD - US dollar</item>
+        <item>JPY - Japanese yen</item>
+        <item>…</item>
+    </string-array>
+    <string-array name="settings_currency_list_values">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>JPY</item>
+        <item>…</item>
+    </string-array>
+    <string name="settings_currency_update_title">Last currency rates update</string>
+    <string name="settings_data_title">Data management</string>
+    <string name="settings_data_deleteAll_title">Clear all saved data</string>
+    <string name="settings_data_deleteAll_description">All movements, statistics or preferences will be deleted from this device</string>
+    <string name="dialog_confirmDelete_title">Delete all data</string>
+    <string name="dialog_confirmDelete_description">All application data or preferences will be deleted from this device. This action can not be canceled.</string>
+    <string name="deleteAll_ok">All data were deleted</string>
+
 </resources>

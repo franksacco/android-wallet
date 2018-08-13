@@ -7,9 +7,9 @@
 
         <ListPreference
             android:defaultValue="EUR"
-            android:entries="@array/settings_currency_list_titles"
-            android:entryValues="@array/settings_currency_list_values"
-            android:key="settings_currency_preferred"
+            android:entries="@array/currency_names"
+            android:entryValues="@array/currency_codes"
+            android:key="preferred_currency"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/settings_currency_list_title" />
@@ -17,7 +17,7 @@
         <Preference
             android:key="settings_currency_update"
             android:title="@string/settings_currency_update_title"
-            android:summary="@string/undefined" />
+            android:summary="@null" />
 
     </PreferenceCategory>
 

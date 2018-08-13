@@ -10,15 +10,15 @@
             android:id="@+id/navigation_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:checked="true"
-            android:title="@string/navigation_home" />
+            android:title="@string/home_title" />
         <item
             android:id="@+id/navigation_transactions"
             android:icon="@drawable/ic_swap_horiz_black_24dp"
-            android:title="@string/navigation_transactions" />
+            android:title="@string/transactions_title" />
         <item
             android:id="@+id/navigation_categories"
             android:icon="@drawable/ic_style_black_24dp"
-            android:title="@string/navigation_categories" />
+            android:title="@string/categories_title" />
     </group>
 
     <group
@@ -27,6 +27,6 @@
         <item
             android:id="@+id/navigation_settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/navigation_settings" />
+            android:title="@string/settings_title" />
     </group>
 </menu>

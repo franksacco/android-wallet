@@ -1,7 +1,6 @@
 package com.franksacco.wallet.adapters;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -15,33 +14,25 @@ import com.franksacco.wallet.entities.Category;
 import java.util.ArrayList;
 
 
+/**
+ * Adapter for categories recycler view
+ */
+@SuppressWarnings("RedundantCast")
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
 
-    private ArrayList<Category> mDataset;
+    /**
+     * Dataset
+     */
+    private ArrayList<Category> mDataset = new ArrayList<>();
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private LinearLayout mView;
-
-        ViewHolder(LinearLayout v) {
-            super(v);
-            mView = v;
-        }
-
-        public void setIcon(int resourceId) {
-            CardView iconContainer = (CardView) mView.getChildAt(0);
-            ImageView icon = (ImageView) iconContainer.getChildAt(0);
-            icon.setImageResource(resourceId);
-        }
-
-        public void setTitle(String title) {
-            TextView textView = (TextView) mView.getChildAt(1);
-            textView.setText(title);
-        }
-    }
-
-    public CategoriesAdapter(ArrayList<Category> dataset) {
-        mDataset = dataset;
+    /**
+     * Set items of dataset
+     * @param items Dataset
+     */
+    public void setItems(ArrayList<Category> items) {
+        this.mDataset.clear();
+        this.mDataset.addAll(items);
+        this.notifyDataSetChanged();
     }
 
     /**
@@ -50,29 +41,51 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
      */
     public void addItem(Category item) {
         int position = getItemCount();
-        mDataset.add(item);
-        notifyItemInserted(position);
+        this.mDataset.add(item);
+        this.notifyItemInserted(position);
     }
 
     @NonNull
     @Override
-    public CategoriesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                           int viewType) {
-        LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LinearLayout view = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_one_line, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Category category = mDataset.get(position);
+        Category category = this.mDataset.get(position);
         holder.setIcon(category.getIconIdentifier());
         holder.setTitle(category.getName());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return this.mDataset.size();
+    }
+
+    /**
+     * A ViewHolder describes an item view and metadata about its place within the RecyclerView
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private ImageView mIcon;
+        private TextView mTitle;
+
+        ViewHolder(LinearLayout itemView) {
+            super(itemView);
+            this.mIcon = (ImageView) itemView.findViewById(R.id.itemOneLine_icon);
+            this.mTitle = (TextView) itemView.findViewById(R.id.itemOneLine_title);
+        }
+
+        public void setIcon(int resourceId) {
+            this.mIcon.setImageResource(resourceId);
+        }
+
+        public void setTitle(String title) {
+            this.mTitle.setText(title);
+        }
     }
 
 }

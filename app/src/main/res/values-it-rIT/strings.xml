@@ -1,22 +1,39 @@
 <resources>
     <!-- Words without context -->
-    <string name="yesterday">Ieri</string>
-    <string name="this_week">Questa settimana</string>
-    <string name="this_month">Questo mese</string>
-    <string name="today">Oggi</string>
     <string name="save">Salva</string>
 
     <!-- Drawer & Navigation -->
     <string name="drawer_open">Apri il menù di navigazione</string>
     <string name="drawer_close">Chiudi il menù di navigazione</string>
     <string name="navigation_home">Home</string>
-    <string name="navigation_transactions">Transazioni</string>
-    <string name="navigation_categories">Categorie</string>
-    <string name="navigation_settings">Impostazioni</string>
 
     <!-- Home -->
-    <string name="title_balance">Saldo</string>
-    <string name="title_expense">Spese</string>
+    <string name="home_balance">Saldo</string>
+    <string name="home_balanceIn">Entrate</string>
+    <string name="home_balanceOut">Uscite</string>
+    <string name="home_expense">Spese</string>
+    <string name="home_expenseToday">Oggi</string>
+    <string name="home_expenseYesterday">Ieri</string>
+    <string name="home_expenseThisWeek">Questa settimana</string>
+    <string name="home_expenseThisMonth">Questo mese</string>
+
+    <!-- Add transaction -->
+    <string name="addTransaction_title">Aggiungi transazione</string>
+    <string name="confirmExit_dialog_title">Ignorare le modifiche?</string>
+    <string-array name="addTransaction_input_transactionType">
+        <item>Spesa</item>
+        <item>Entrata</item>
+    </string-array>
+    <string name="addTransaction_input_category_hint">Categoria</string>
+    <string name="addTransaction_input_amount_hint">Ammontare</string>
+    <string name="addTransaction_input_paymentType_hint">Tipologia pagamento</string>
+    <string name="addTransaction_input_currency_hint">Moneta</string>
+    <string name="addTransaction_input_notes_hint">Note</string>
+    <string name="addTransaction_ok">Transazione salvata</string>
+    <string name="addTransaction_error">Errore durante il salvataggio</string>
+
+    <!-- Transactions -->
+    <string name="transactions_title">Transazioni</string>
 
     <!-- Categories -->
     <string name="categories_title">Categorie</string>
@@ -25,25 +42,10 @@
     <string name="addCategory_ok">Categoria aggiunta</string>
     <string name="addCategory_error">Errore durante l\'inserimento della categoria</string>
 
-    <!-- Add transaction -->
-    <string name="addTransaction_title">Aggiungi transazione</string>
-    <string name="confirmExit_dialog_title">Non salvare le modifiche?</string>
-    <string name="addTransaction_input_amount_hint">Ammontare</string>
-    <string name="addTransaction_input_category_hint">Categoria</string>
-    <string name="addTransaction_input_date_hint">Data</string>
-    <string name="addTransaction_input_note_hint">Note</string>
-    <string name="addTransaction_ok">Transazione salvata</string>
-
     <!-- Settings activity -->
     <string name="settings_title">Impostazioni</string>
     <string name="settings_currency_list_title">Valuta preferita</string>
     <string name="settings_currency_title">Valuta</string>
-    <string-array name="settings_currency_list_titles">
-        <item>EUR - Euro</item>
-        <item>USD - Dollaro americano</item>
-        <item>JPY - Yen giapponese</item>
-        <item>…</item>
-    </string-array>
     <string name="settings_currency_update_title">Ultimo aggiornamento dei tassi di cambio</string>
     <string name="settings_data_title">Gestione dati</string>
     <string name="settings_data_deleteAll_title">Cancella tutti i dati salvati</string>
@@ -51,5 +53,51 @@
     <string name="dialog_confirmDelete_title">Elimina tutti i dati</string>
     <string name="dialog_confirmDelete_description">Tutti i dati o preferenze dell\'applicazione verranno eliminati da questo dispositivo. Questa azione non può essere annullata.</string>
     <string name="deleteAll_ok">Tutti i dati sono stati eliminati</string>
+
+    <!-- Payment types -->
+    <string-array name="payment_types">
+        <item>Contanti</item>
+        <item>Carta di debito</item>
+        <item>Carta di credito</item>
+        <item>Bonifico bancario</item>
+        <item>Pagamento web</item>
+    </string-array>
+
+    <!-- Currencies -->
+    <string-array name="currency_names">
+        <item>Euro (EUR)</item>
+        <item>Dollaro Americano (USD)</item>
+        <item>Yen Giapponese (JPY)</item>
+        <item>Lev Bulgaro (BGN)</item>
+        <item>Corona Ceca (CZK)</item>
+        <item>Corona Danese (DKK)</item>
+        <item>Sterlina Britannica (GBP)</item>
+        <item>Forint Ungaro (HUF)</item>
+        <item>Zloty Polacco (PLN)</item>
+        <item>Leu Rumeno (RON)</item>
+        <item>Corona Svedese (SEK)</item>
+        <item>Franco Svizzero (CHF)</item>
+        <item>Corona Islandese (ISK)</item>
+        <item>Corona Norvegese (NOK)</item>
+        <item>Kuna Croata (HRK)</item>
+        <item>Roublo Russo (RUB)</item>
+        <item>Lira Turca (TRY)</item>
+        <item>Dollaro Australiano (AUD)</item>
+        <item>Real Brasiliano (BRL)</item>
+        <item>Dollaro Canadese (CAD)</item>
+        <item>Yuan Renminbi Cinese (CNY)</item>
+        <item>Dollaro di Hong Kong (HKD)</item>
+        <item>Rupia Indonesiana (IDR)</item>
+        <item>Shekel Israeliano (ILS)</item>
+        <item>Rupia Indiana (INR)</item>
+        <item>Won Sudcoreano (KRW)</item>
+        <item>Peso Messicano (MXN)</item>
+        <item>Ringgit Malese (MYR)</item>
+        <item>Dollaro Neozelandese (NZD)</item>
+        <item>Piso Filippino (PHP)</item>
+        <item>Dollaro di Singapore (SGD)</item>
+        <item>Baht Tailandese (THB)</item>
+        <item>Rand Sud Africano (ZAR)</item>
+    </string-array>
 
 </resources>

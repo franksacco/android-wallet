@@ -3,25 +3,42 @@
     <string name="app_name" translatable="false">MyWallet</string>
 
     <!-- Words without context -->
-    <string name="yesterday">Yesterday</string>
-    <string name="this_week">This week</string>
-    <string name="this_month">This month</string>
-    <string name="today">Today</string>
     <string name="save">Save</string>
-    <string name="undefined" translatable="false">- -</string>
 
     <!-- Drawer & Navigation -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_logo" translatable="false">App logo</string>
     <string name="navigation_home">Home</string>
-    <string name="navigation_transactions">Transactions</string>
-    <string name="navigation_categories">Categories</string>
-    <string name="navigation_settings">Settings</string>
 
     <!-- Home -->
-    <string name="title_balance">Balance</string>
-    <string name="title_expense">Expense</string>
+    <string name="home_title" translatable="false">Home</string>
+    <string name="home_balance">Balance</string>
+    <string name="home_balanceIn">Entrances</string>
+    <string name="home_balanceOut">Expenses</string>
+    <string name="home_expense">Expense</string>
+    <string name="home_expenseToday">Today</string>
+    <string name="home_expenseYesterday">Yesterday</string>
+    <string name="home_expenseThisWeek">This week</string>
+    <string name="home_expenseThisMonth">This month</string>
+
+    <!-- Add transaction -->
+    <string name="addTransaction_title">Add transaction</string>
+    <string name="confirmExit_dialog_title">Discard changes?</string>
+    <string-array name="addTransaction_input_transactionType">
+        <item>Expense</item>
+        <item>Incoming</item>
+    </string-array>
+    <string name="addTransaction_input_category_hint">Category</string>
+    <string name="addTransaction_input_amount_hint">Amount</string>
+    <string name="addTransaction_input_paymentType_hint">Payment type</string>
+    <string name="addTransaction_input_currency_hint">Currency</string>
+    <string name="addTransaction_input_notes_hint">Note</string>
+    <string name="addTransaction_ok">Transaction saved</string>
+    <string name="addTransaction_error">Error during transaction saving</string>
+
+    <!-- Transactions -->
+    <string name="transactions_title">Transactions</string>
 
     <!-- Categories -->
     <string name="categories_title">Categories</string>
@@ -30,31 +47,10 @@
     <string name="addCategory_ok">Category added</string>
     <string name="addCategory_error">Error during category adding</string>
 
-    <!-- Add transaction -->
-    <string name="addTransaction_title">Add transaction</string>
-    <string name="confirmExit_dialog_title">Discard changes?</string>
-    <string name="addTransaction_input_amount_hint">Amount</string>
-    <string name="addTransaction_input_category_hint">Category</string>
-    <string name="addTransaction_input_date_hint">Date</string>
-    <string name="addTransaction_input_note_hint">Note</string>
-    <string name="addTransaction_ok">Transaction saved</string>
-
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_currency_title">Currency</string>
     <string name="settings_currency_list_title">Preferred currency</string>
-    <string-array name="settings_currency_list_titles">
-        <item>EUR - Euro</item>
-        <item>USD - US dollar</item>
-        <item>JPY - Japanese yen</item>
-        <item>…</item>
-    </string-array>
-    <string-array name="settings_currency_list_values">
-        <item>EUR</item>
-        <item>USD</item>
-        <item>JPY</item>
-        <item>…</item>
-    </string-array>
     <string name="settings_currency_update_title">Last currency rates update</string>
     <string name="settings_data_title">Data management</string>
     <string name="settings_data_deleteAll_title">Clear all saved data</string>
@@ -62,5 +58,86 @@
     <string name="dialog_confirmDelete_title">Delete all data</string>
     <string name="dialog_confirmDelete_description">All application data or preferences will be deleted from this device. This action can not be canceled.</string>
     <string name="deleteAll_ok">All data were deleted</string>
+
+    <!-- Payment types -->
+    <string-array name="payment_types">
+        <item>Cash</item>
+        <item>Debit card</item>
+        <item>Credit card</item>
+        <item>Bank transfer</item>
+        <item>Web payment</item>
+    </string-array>
+
+    <!-- Currencies -->
+    <string-array name="currency_names">
+        <item>Euro (EUR)</item>
+        <item>US Dollar (USD)</item>
+        <item>Japanese Yen (JPY)</item>
+        <item>Bulgarian Lev (BGN)</item>
+        <item>Czech Koruna (CZK)</item>
+        <item>Danish Krone (DKK)</item>
+        <item>Pound Sterling (GBP)</item>
+        <item>Hungarian Forint (HUF)</item>
+        <item>Polish Zloty (PLN)</item>
+        <item>Romanian Leu (RON)</item>
+        <item>Swedish Krona (SEK)</item>
+        <item>Swiss Franc (CHF)</item>
+        <item>Icelandic Krona (ISK)</item>
+        <item>Norwegian Krone (NOK)</item>
+        <item>Croatian Kuna (HRK)</item>
+        <item>Russian Rouble (RUB)</item>
+        <item>Turkish Lira (TRY)</item>
+        <item>Australian Dollar (AUD)</item>
+        <item>Brazilian Real (BRL)</item>
+        <item>Canadian Dollar (CAD)</item>
+        <item>Chinese Yuan Renminbi (CNY)</item>
+        <item>Hong Kong Dollar (HKD)</item>
+        <item>Indonesian Rupiah (IDR)</item>
+        <item>Israeli Shekel (ILS)</item>
+        <item>Indian rupee (INR)</item>
+        <item>South Korean Won (KRW)</item>
+        <item>Mexican Peso (MXN)</item>
+        <item>Malaysian Ringgit (MYR)</item>
+        <item>New Zealand Dollar (NZD)</item>
+        <item>Philippine Piso (PHP)</item>
+        <item>Singapore Dollar (SGD)</item>
+        <item>Thai Baht (THB)</item>
+        <item>South African Rand (ZAR)</item>
+    </string-array>
+    <string-array name="currency_codes">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>JPY</item>
+        <item>BGN</item>
+        <item>CZK</item>
+        <item>DKK</item>
+        <item>GBP</item>
+        <item>HUF</item>
+        <item>PLN</item>
+        <item>RON</item>
+        <item>SEK</item>
+        <item>CHF</item>
+        <item>ISK</item>
+        <item>NOK</item>
+        <item>HRK</item>
+        <item>RUB</item>
+        <item>TRY</item>
+        <item>AUD</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CNY</item>
+        <item>HKD</item>
+        <item>IDR</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>KRW</item>
+        <item>MXN</item>
+        <item>MYR</item>
+        <item>NZD</item>
+        <item>PHP</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>ZAR</item>
+    </string-array>
 
 </resources>

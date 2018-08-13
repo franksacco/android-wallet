@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="48dp"
-    android:clickable="true"
-    android:focusable="true"
     android:background="?selectableItemBackground">
 
     <android.support.v7.widget.CardView
@@ -19,20 +18,22 @@
         android:layout_marginBottom="8dp"
         app:cardElevation="0dp"
         app:cardCornerRadius="20dp">
-
         <ImageView
+            android:id="@+id/itemOneLine_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:contentDescription="@string/undefined"/>
-
+            android:contentDescription="@null"/>
     </android.support.v7.widget.CardView>
 
     <TextView
+        android:id="@+id/itemOneLine_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:textColor="@color/textTitle"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
 </LinearLayout>

@@ -27,9 +27,13 @@ public class Category {
     private String name = null;
 
     /**
-     * Category constructor
+     * Category constructors
      */
     public Category() {}
+    public Category(String icon, String name) {
+        this.icon = icon;
+        this.name = name;
+    }
     public Category(int id, String icon, String name) {
         this.id = id;
         this.icon = icon;
@@ -57,7 +61,7 @@ public class Category {
      * @return Icon string identifier
      */
     public String getIcon() {
-        return icon;
+        return this.icon;
     }
 
     /**
@@ -66,7 +70,7 @@ public class Category {
      */
     public int getIconIdentifier() {
         try {
-            return R.drawable.class.getField(icon).getInt(null);
+            return R.drawable.class.getField(this.icon).getInt(null);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             Log.e(TAG, "invalid drawable resource identifier: " + icon);
         }
@@ -86,7 +90,7 @@ public class Category {
      * @return String
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -99,7 +103,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category: id=" + id + ", icon=" + icon + ", name=" + name;
+        return TAG + ": id=" + id + ", icon=" + icon + ", name=" + name;
     }
 
 }

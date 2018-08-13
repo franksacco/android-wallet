@@ -32,22 +32,22 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.layout_main);
+        this.setContentView(R.layout.main_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) this.findViewById(R.id.toolbar_main);
+        this.setSupportActionBar(toolbar);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.layout_main);
+        drawerLayout = (DrawerLayout) this.findViewById(R.id.layout_main);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.navigation_drawer);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().findItem(R.id.navigation_home).setChecked(true);
 
-        displayView(R.id.navigation_home);
+        this.displayView(R.id.navigation_home);
 
         Log.d(TAG, "activity created");
     }
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else if (!viewIsAtHome) {
-            displayView(R.id.navigation_home);
+            this.displayView(R.id.navigation_home);
         } else {
             super.onBackPressed();
         }
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
-        displayView(item.getItemId());
+        this.displayView(item.getItemId());
         return true;
     }
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
      */
     public void displayView(int id) {
         Fragment fragment = null;
-        String title = getString(R.string.app_name);
+        String title = this.getString(R.string.app_name);
 
         viewIsAtHome = false;
         switch (id) {
@@ -85,11 +85,12 @@ public class MainActivity extends AppCompatActivity
                 fragment = new HomeFragment();
                 break;
             case R.id.navigation_transactions:
-
+                fragment = new TransactionsFragment();
+                title = this.getString(R.string.transactions_title);
                 break;
             case R.id.navigation_categories:
                 fragment = new CategoriesFragment();
-                title = getResources().getString(R.string.categories_title);
+                title = this.getString(R.string.categories_title);
                 break;
             case R.id.navigation_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
@@ -97,14 +98,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (fragment != null) {
-            getFragmentManager().beginTransaction()
+            this.getFragmentManager().beginTransaction()
                     .replace(R.id.content_main, fragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         }
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(title);
+        if (this.getSupportActionBar() != null) {
+            this.getSupportActionBar().setTitle(title);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
     }

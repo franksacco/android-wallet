@@ -20,7 +20,8 @@ import android.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.franksacco.wallet.database.Database;
+import com.franksacco.wallet.helpers.CurrencyManager;
+import com.franksacco.wallet.helpers.DatabaseOpenHelper;
 
 
 /**
@@ -72,7 +73,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        getFragmentManager().beginTransaction()
+        this.getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
@@ -89,20 +90,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            addPreferencesFromResource(R.xml.settings);
-            setHasOptionsMenu(true);
+            this.addPreferencesFromResource(R.xml.settings);
+            this.setHasOptionsMenu(true);
 
-            bindPreferenceChange(findPreference("settings_currency_preferred"));
+            bindPreferenceChange(findPreference(CurrencyManager.PREFERRED_CURRENCY_PREFERENCE));
             findPreference("settings_currency_update").setOnPreferenceClickListener(this);
             findPreference("settings_data_deleteAll").setOnPreferenceClickListener(this);
 
             SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
             Preference currencyUpdate = findPreference("settings_currency_update");
-            currencyUpdate.setSummary(
-                    preferences.getString("currency_rates_datetime", "0000-00-00 00:00")
-            );
+            currencyUpdate.setSummary(preferences.getString(
+                    CurrencyManager.CHANGE_RATES_UPDATE_PREFERENCE, "0000-00-00 00:00"));
 
-            Log.d(TAG, "fragment created");
+            Log.d(TAG, "created");
         }
 
         @Override
@@ -157,7 +157,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             AppCompatPreferenceActivity activity = (AppCompatPreferenceActivity) getActivity();
             String message = activity.getResources().getString(R.string.deleteAll_ok);
             try {
-                if (!activity.deleteDatabase(Database.DATABASE_NAME)) {
+                if (!activity.deleteDatabase(DatabaseOpenHelper.DATABASE_NAME)) {
                     throw new Error("Error during database deletion");
                 }
                 PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext())

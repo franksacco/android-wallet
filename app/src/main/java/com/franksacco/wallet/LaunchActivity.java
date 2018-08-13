@@ -13,11 +13,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // todo check for new change rates
 
         Log.d(TAG, "launch routine finished");
         startActivity(new Intent(this, MainActivity.class));

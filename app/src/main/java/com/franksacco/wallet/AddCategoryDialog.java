@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 
+/**
+ * Add category dialog fragment
+ */
 @SuppressWarnings("RedundantCast")
 public class AddCategoryDialog extends DialogFragment {
 
@@ -39,7 +42,7 @@ public class AddCategoryDialog extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         LinearLayout view = (LinearLayout) inflater.inflate(
-                R.layout.dialog_add_category, null);
+                R.layout.add_category_dialog, null);
 
         final TextInputEditText input =
                 (TextInputEditText) view.findViewById(R.id.addCategory_input_name);

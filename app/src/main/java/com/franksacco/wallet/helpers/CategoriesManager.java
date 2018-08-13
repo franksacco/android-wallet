@@ -1,10 +1,9 @@
-package com.franksacco.wallet.database;
+package com.franksacco.wallet.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.franksacco.wallet.entities.Category;
@@ -13,11 +12,11 @@ import java.util.ArrayList;
 
 
 /**
- * Helper class for categories table in database.
+ * Helper class for categories management in database
  */
-public class CategoryOpenHelper extends SQLiteOpenHelper {
+public class CategoriesManager {
 
-    private static final String TAG = "CategoryOpenHelper";
+    private static final String TAG = "CategoriesManager";
 
     public static final String TABLE_NAME = "categories";
 
@@ -31,28 +30,41 @@ public class CategoryOpenHelper extends SQLiteOpenHelper {
             NAME_COL
     };
 
-    private static final String DATABASE_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
-            + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + ICON_COL + " TEXT NOT NULL DEFAULT 'ic_style_white_24dp', "
-            + NAME_COL + " TEXT NOT NULL"
-            + ");";
+    /**
+     * Instance of database helper
+     */
+    private DatabaseOpenHelper db;
 
-    public CategoryOpenHelper(Context context) {
-        super(context, Database.DATABASE_NAME, null, Database.DATABASE_VERSION);
-        Log.d(TAG, "helper created");
+    /**
+     * Categories manager initialization
+     * @param context Application context
+     */
+    public CategoriesManager(Context context) {
+        this.db = DatabaseOpenHelper.getInstance(context);
+        Log.d(TAG, "created");
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DATABASE_CREATE_TABLE);
-        Log.d(TAG, "categories table created");
+    /**
+     * Table creation
+     * @param db Database reference
+     */
+    public static void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
+                + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+                + ICON_COL + " TEXT NOT NULL DEFAULT 'ic_style_white_24dp', "
+                + NAME_COL + " TEXT NOT NULL"
+                + ");");
+        Log.d(TAG, "table created");
 
         insertDefaultCategories(db);
         Log.d(TAG, "default categories inserted");
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    /**
+     * Table upgrade
+     * @param db Database reference
+     */
+    public static void onUpgrade(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         Log.d(TAG, "database upgrade - table dropped");
         onCreate(db);
@@ -61,7 +73,7 @@ public class CategoryOpenHelper extends SQLiteOpenHelper {
     /**
      * Populate table with default categories
      */
-    private void insertDefaultCategories(SQLiteDatabase db) {
+    private static void insertDefaultCategories(SQLiteDatabase db) {
         db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
                 + "VALUES ('ic_local_cafe_white_24dp', 'Bar');");
         db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
@@ -106,7 +118,7 @@ public class CategoryOpenHelper extends SQLiteOpenHelper {
         values.put(ICON_COL, category.getIcon());
         values.put(NAME_COL, category.getName());
 
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = this.db.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, values);
         Log.d(TAG, "inserted category with id " + id);
         db.close();
@@ -127,7 +139,7 @@ public class CategoryOpenHelper extends SQLiteOpenHelper {
     public ArrayList<Category> select(String[] columns, String where,
                                        String[] whereParams, String groupBy,
                                        String having, String orderBy, String limit) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = this.db.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, columns, where, whereParams,
                 groupBy, having, orderBy, limit);
         cursor.moveToFirst();
@@ -138,6 +150,7 @@ public class CategoryOpenHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
         cursor.close();
+        db.close();
         return list;
     }
 

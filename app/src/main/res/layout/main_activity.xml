@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_main"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -20,7 +20,7 @@
             android:theme="@style/AppBaseTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_main"
+                android:id="@+id/mainToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
@@ -30,7 +30,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <FrameLayout
-            android:id="@+id/content_main"
+            android:id="@+id/mainContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?android:attr/actionBarSize" />
@@ -38,7 +38,7 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_drawer"
+        android:id="@+id/navigationDrawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

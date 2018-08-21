@@ -2,10 +2,12 @@ package com.franksacco.wallet;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -15,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.franksacco.wallet.adapters.TransactionsAdapter;
 import com.franksacco.wallet.entities.Transaction;
@@ -59,10 +60,11 @@ public class TransactionsFragment extends Fragment
                 new TransactionsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(TransactionsAdapter.ViewHolder item) {
-                // todo create edit transaction activity and connect
-                Toast.makeText(TransactionsFragment.this.getActivity(),
-                        "Clicked item " + item.getAdapterPosition(),
-                        Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(TransactionsFragment.this.getActivity(),
+                        EditTransactionActivity.class);
+                i.putExtra(EditTransactionActivity.TRANSACTION_ID, item.getItemId());
+                TransactionsFragment.this.startActivityForResult(
+                        i, EditTransactionActivity.REQUEST_CODE);
             }
         });
         recyclerView.setAdapter(this.mAdapter);
@@ -72,6 +74,23 @@ public class TransactionsFragment extends Fragment
 
         Log.d(TAG, "view created");
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EditTransactionActivity.REQUEST_CODE) {
+            Log.d(TAG, "EditTransaction activity finished with code " + resultCode);
+            if (resultCode == EditTransactionActivity.RESULT_UPDATED) {
+                new LoadTransactions(this).execute();
+            } else if (resultCode == EditTransactionActivity.RESULT_DELETED) {
+                new LoadTransactions(this).execute();
+                Snackbar.make(this.getActivity().findViewById(R.id.transactionsLayout),
+                        R.string.deleteTransaction_ok, Snackbar.LENGTH_SHORT).show();
+            } else if (resultCode == EditTransactionActivity.RESULT_DELETED_ERROR) {
+                Snackbar.make(this.getActivity().findViewById(R.id.transactionsLayout),
+                        R.string.deleteTransaction_error, Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
@@ -142,7 +161,7 @@ public class TransactionsFragment extends Fragment
             Activity activity = fragment.getActivity();
             if (activity.isFinishing()) return null;
 
-            TransactionsManager manager = new TransactionsManager(activity.getApplicationContext());
+            TransactionsManager manager = new TransactionsManager(activity);
             return manager.select(TransactionsManager.DATETIME_COL + " >= ? AND "
                             + TransactionsManager.DATETIME_COL + " <= ?",
                     null, null,

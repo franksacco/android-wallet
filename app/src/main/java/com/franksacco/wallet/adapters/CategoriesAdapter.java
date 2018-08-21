@@ -3,6 +3,7 @@ package com.franksacco.wallet.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,19 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     private ArrayList<Category> mDataset = new ArrayList<>();
 
     /**
+     * Category manager
+     */
+    private OnActionClickListener mActionClickListener;
+
+    /**
+     * Adapter constructor
+     */
+    public CategoriesAdapter(OnActionClickListener categoriesManager) {
+        this.setHasStableIds(true);
+        this.mActionClickListener = categoriesManager;
+    }
+
+    /**
      * Set items of dataset
      * @param items Dataset
      */
@@ -45,6 +59,15 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         this.notifyItemInserted(position);
     }
 
+    /**
+     * Remove an item from dataset
+     * @param position Position of the item to be removed
+     */
+    public void removeItem(int position) {
+        this.mDataset.remove(position);
+        this.notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,10 +77,27 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Category category = this.mDataset.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        final Category category = this.mDataset.get(position);
         holder.setIcon(category.getIconIdentifier());
         holder.setTitle(category.getName());
+        holder.setActionClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CategoriesAdapter.this.mActionClickListener
+                        .OnActionClick(category, holder.getAdapterPosition());
+            }
+        });
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -72,11 +112,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
         private ImageView mIcon;
         private TextView mTitle;
+        private ImageView mAction;
 
         ViewHolder(LinearLayout itemView) {
             super(itemView);
             this.mIcon = (ImageView) itemView.findViewById(R.id.itemOneLine_icon);
             this.mTitle = (TextView) itemView.findViewById(R.id.itemOneLine_title);
+            this.mAction = (ImageView) itemView.findViewById(R.id.itemOneLine_action);
+            this.mAction.setImageResource(R.drawable.ic_delete_black_24dp);
         }
 
         public void setIcon(int resourceId) {
@@ -86,6 +129,25 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         public void setTitle(String title) {
             this.mTitle.setText(title);
         }
+
+        void setActionClickListener(View.OnClickListener listener) {
+            this.mAction.setOnClickListener(listener);
+        }
+
+    }
+
+    /**
+     * Interface for manage action click
+     */
+    public interface OnActionClickListener {
+
+        /**
+         * Method called on action view click
+         * @param category Category object associated to row clicked
+         * @param position Item position
+         */
+        void OnActionClick(Category category, int position);
+
     }
 
 }

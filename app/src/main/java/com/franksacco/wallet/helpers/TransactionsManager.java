@@ -17,6 +17,7 @@ import java.util.Calendar;
 /**
  * Helper class for transactions table in database
  */
+@SuppressWarnings("WeakerAccess")
 public class TransactionsManager {
 
     private static final String TAG = "TransactionsManager";
@@ -33,15 +34,14 @@ public class TransactionsManager {
     /**
      * Instance of database helper
      */
-    private DatabaseOpenHelper db;
+    private DatabaseOpenHelper mDatabaseHelper;
 
     /**
      * Transactions manager initialization
      * @param context Application context
      */
     public TransactionsManager(Context context) {
-        this.db = DatabaseOpenHelper.getInstance(context);
-        Log.d(TAG, "created");
+        this.mDatabaseHelper = DatabaseOpenHelper.getInstance(context);
     }
 
     /**
@@ -103,7 +103,7 @@ public class TransactionsManager {
         values.put(DATETIME_COL, DateFormat.format("yyyy-MM-dd HH:mm", dateTime).toString());
         values.put(NOTES_COL, transaction.getNotes());
 
-        SQLiteDatabase db = this.db.getWritableDatabase();
+        SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, values);
         Log.d(TAG, "inserted transaction with id " + id);
         db.close();
@@ -124,7 +124,7 @@ public class TransactionsManager {
                                          String orderBy, String limit, String[] params) {
         String query = this.prepareSelectQuery(where, groupBy, having, orderBy, limit);
 
-        SQLiteDatabase db = this.db.getReadableDatabase();
+        SQLiteDatabase db = this.mDatabaseHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, params);
         cursor.moveToFirst();
 
@@ -170,6 +170,41 @@ public class TransactionsManager {
             query += " LIMIT " + limit;
         }
         return query + ";";
+    }
+
+    /**
+     * Update transaction values in database
+     * @param transaction Transaction object to be updated
+     * @return {@code true} if query affects only one row, {@code false} otherwise
+     */
+    public boolean update(Transaction transaction) {
+        ContentValues values = new ContentValues();
+        values.put(CATEGORY_COL, transaction.getCategory().getId());
+        values.put(AMOUNT_COL, transaction.getAmount());
+        values.put(PAYMENT_TYPE_COL, transaction.getPaymentTypeId());
+        Calendar dateTime = transaction.getDateTime();
+        values.put(DATETIME_COL, DateFormat.format("yyyy-MM-dd HH:mm", dateTime).toString());
+        values.put(NOTES_COL, transaction.getNotes());
+
+        SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
+        int result = db.update(TABLE_NAME, values, ID_COL + " = ?",
+                new String[]{String.valueOf(transaction.getId())});
+        db.close();
+        Log.d(TAG, "transaction with id " + transaction.getId() + " updated");
+        return result == 1;
+    }
+
+    /**
+     * Delete transaction in database
+     * @param transaction Transaction object to be deleted
+     * @return {@code true} if query affects only one row, {@code false} otherwise
+     */
+    public boolean delete(Transaction transaction) {
+        SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
+        int result = db.delete(TABLE_NAME, ID_COL + " = ?",
+                new String[]{String.valueOf(transaction.getId())});
+        db.close();
+        return result == 1;
     }
 
 }

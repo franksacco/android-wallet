@@ -1,8 +1,10 @@
 package com.franksacco.wallet;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,10 +48,37 @@ public class CategoriesFragment extends Fragment
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        this.mAdapter = new CategoriesAdapter();
+        final CategoriesManager categoriesManager = new CategoriesManager(this.getActivity());
+
+        this.mAdapter = new CategoriesAdapter(new CategoriesAdapter.OnActionClickListener() {
+            @Override
+            public void OnActionClick(final Category category, final int position) {
+                new AlertDialog.Builder(CategoriesFragment.this.getActivity())
+                        .setTitle(R.string.deleteCategory_title)
+                        .setMessage(R.string.deleteCategory_description)
+                        .setPositiveButton(android.R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int message = R.string.deleteCategory_error;
+                                if (categoriesManager.delete(category)) {
+                                    message = R.string.deleteCategory_ok;
+                                    CategoriesFragment.this.mAdapter.removeItem(position);
+                                }
+                                Snackbar.make(CategoriesFragment.this.getActivity()
+                                                .findViewById(R.id.categoriesLayout),
+                                        message, Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create()
+                        .show();
+            }
+        });
         recyclerView.setAdapter(this.mAdapter);
 
-        new LoadCategories(this).execute();
+        new LoadCategories(categoriesManager, this).execute();
 
         this.bindAddCategoryFab(view);
 
@@ -105,9 +134,11 @@ public class CategoriesFragment extends Fragment
      */
     private static class LoadCategories extends AsyncTask<Void, Void, ArrayList<Category>> {
 
+        private CategoriesManager mCategoriesManager;
         private WeakReference<CategoriesFragment> mReference;
 
-        LoadCategories(CategoriesFragment context) {
+        LoadCategories(CategoriesManager categoriesManager, CategoriesFragment context) {
+            this.mCategoriesManager = categoriesManager;
             this.mReference = new WeakReference<>(context);
         }
 
@@ -118,8 +149,7 @@ public class CategoriesFragment extends Fragment
             Activity activity = fragment.getActivity();
             if (activity.isFinishing()) return null;
 
-            CategoriesManager manager = new CategoriesManager(activity.getApplicationContext());
-            return manager.select(CategoriesManager.ALL_COLUMNS, null,
+            return this.mCategoriesManager.select(CategoriesManager.ALL_COLUMNS, null,
                     null, null, null, null, null);
         }
 

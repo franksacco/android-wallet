@@ -1,6 +1,9 @@
 package com.franksacco.wallet.entities;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.franksacco.wallet.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,6 +118,20 @@ public class Transaction {
     }
 
     /**
+     * Get transaction payment type
+     * @param context Application context
+     * @return Payment type string
+     */
+    public String getPaymentType(Context context) {
+        String[] resource = context.getResources().getStringArray(R.array.payment_types);
+        try {
+            return resource[this.paymentTypeId];
+        } catch (IndexOutOfBoundsException e) {
+            return "";
+        }
+    }
+
+    /**
      * Set transaction payment type id
      * @param paymentTypeId Payment type id
      */
@@ -142,6 +159,26 @@ public class Transaction {
         } catch (ParseException e) {
             Log.e(TAG, "invalid datetime format");
         }
+    }
+
+    /**
+     * Set transaction date
+     * @param year Year
+     * @param month Month
+     * @param date Day of month
+     */
+    public void setDate(int year, int month, int date) {
+        this.dateTime.set(year, month, date);
+    }
+
+    /**
+     * Set transaction time
+     * @param hour Hour
+     * @param minute Minute
+     */
+    public void setTime(int hour, int minute) {
+        this.dateTime.set(Calendar.HOUR_OF_DAY, hour);
+        this.dateTime.set(Calendar.MINUTE, minute);
     }
 
     /**

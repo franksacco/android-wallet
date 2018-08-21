@@ -25,15 +25,26 @@
         <item>Entrata</item>
     </string-array>
     <string name="addTransaction_input_category_hint">Categoria</string>
-    <string name="addTransaction_input_amount_hint">Ammontare</string>
+    <string name="addTransaction_input_amount_hint">Importo</string>
     <string name="addTransaction_input_paymentType_hint">Tipologia pagamento</string>
     <string name="addTransaction_input_currency_hint">Moneta</string>
     <string name="addTransaction_input_notes_hint">Note</string>
     <string name="addTransaction_ok">Transazione salvata</string>
     <string name="addTransaction_error">Errore durante il salvataggio</string>
+    <string name="addTransaction_amountError">Importo non valido</string>
 
     <!-- Transactions -->
     <string name="transactions_title">Transazioni</string>
+
+    <!-- Edit transaction -->
+    <string name="editTransaction_title">Modifica</string>
+    <string name="editTransaction_save">Salva</string>
+    <string name="editTransaction_ok">Modifiche salvate</string>
+    <string name="editTransaction_error">Errore durante il salvataggio</string>
+    <string name="deleteTransaction_title">Elimina</string>
+    <string name="deleteTransaction_description">Sei sicuro di voler eliminare la transazione?</string>
+    <string name="deleteTransaction_ok">Transazione eliminata</string>
+    <string name="deleteTransaction_error">Errore durante l\'eliminazione della transazione</string>
 
     <!-- Categories -->
     <string name="categories_title">Categorie</string>
@@ -41,6 +52,14 @@
     <string name="addCategory_input_name_hint">Nome</string>
     <string name="addCategory_ok">Categoria aggiunta</string>
     <string name="addCategory_error">Errore durante l\'inserimento della categoria</string>
+    <string name="deleteCategory_title">Elimina categoria</string>
+    <string name="deleteCategory_description">Sei sicuro di voler eliminare questa categoria?</string>
+    <string name="deleteCategory_ok">Categoria eliminata</string>
+    <string name="deleteCategory_error">Errore durante l\'eliminazione</string>
+
+    <!-- Import/Export -->
+    <string name="import_title">Importa</string>
+    <string name="export_title">Esporta</string>
 
     <!-- Settings activity -->
     <string name="settings_title">Impostazioni</string>

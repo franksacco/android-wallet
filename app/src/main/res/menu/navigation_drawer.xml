@@ -4,28 +4,41 @@
     tools:showIn="navigation_view">
 
     <group
-        android:id="@+id/navigation_up"
+        android:id="@+id/navigationUp"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_home"
+            android:id="@+id/navigationHome"
             android:icon="@drawable/ic_home_black_24dp"
             android:checked="true"
             android:title="@string/home_title" />
         <item
-            android:id="@+id/navigation_transactions"
+            android:id="@+id/navigationTransactions"
             android:icon="@drawable/ic_swap_horiz_black_24dp"
             android:title="@string/transactions_title" />
         <item
-            android:id="@+id/navigation_categories"
+            android:id="@+id/navigationCategories"
             android:icon="@drawable/ic_style_black_24dp"
             android:title="@string/categories_title" />
     </group>
 
     <group
-        android:id="@+id/navigation_bottom"
+        android:id="@+id/navigationMiddle"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_settings"
+            android:id="@+id/navigationImport"
+            android:icon="@drawable/ic_file_upload_black_24dp"
+            android:title="@string/import_title" />
+        <item
+            android:id="@+id/navigationExport"
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:title="@string/export_title" />
+    </group>
+
+    <group
+        android:id="@+id/navigationBottom"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigationSettings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/settings_title" />
     </group>

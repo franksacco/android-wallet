@@ -33,21 +33,19 @@ public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
 
-    private static final int ADD_TRANSACTION_REQUEST_CODE = 1;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
 
         FloatingActionButton fab_add_transaction =
-                (FloatingActionButton) view.findViewById(R.id.fab_add_transaction);
+                (FloatingActionButton) view.findViewById(R.id.addTransactionFab);
         fab_add_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(HomeFragment.this.getActivity().getApplicationContext(),
-                        AddTransactionActivity.class);
-                startActivityForResult(i, ADD_TRANSACTION_REQUEST_CODE);
+                Intent i = new Intent(
+                        HomeFragment.this.getActivity(), AddTransactionActivity.class);
+                HomeFragment.this.startActivityForResult(i, AddTransactionActivity.REQUEST_CODE);
             }
         });
 
@@ -59,15 +57,16 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_TRANSACTION_REQUEST_CODE) {
+        if (requestCode == AddTransactionActivity.REQUEST_CODE) {
             Log.d(TAG, "AddTransaction activity finished with code " + resultCode);
-
-            new LoadStatistics(this).execute();
-
-            int messageId = resultCode == Activity.RESULT_OK ? R.string.addTransaction_ok
-                    : R.string.addTransaction_error;
-            Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
-                    messageId, Snackbar.LENGTH_SHORT).show();
+            if (resultCode == AddTransactionActivity.RESULT_SAVED) {
+                new LoadStatistics(this).execute();
+                Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
+                        R.string.addTransaction_ok, Snackbar.LENGTH_SHORT).show();
+            } else if (resultCode == AddTransactionActivity.RESULT_ERROR) {
+                Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
+                        R.string.addTransaction_error, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -200,6 +199,7 @@ public class HomeFragment extends Fragment {
             ((TextView) activity.findViewById(R.id.expense_this_week)).setText(values[5]);
             ((TextView) activity.findViewById(R.id.expense_this_month)).setText(values[6]);
         }
+
     }
 
 }

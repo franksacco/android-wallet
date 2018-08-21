@@ -36,9 +36,20 @@
     <string name="addTransaction_input_notes_hint">Note</string>
     <string name="addTransaction_ok">Transaction saved</string>
     <string name="addTransaction_error">Error during transaction saving</string>
+    <string name="addTransaction_amountError">Invalid amount</string>
 
     <!-- Transactions -->
     <string name="transactions_title">Transactions</string>
+
+    <!-- Edit transaction -->
+    <string name="editTransaction_title">Edit</string>
+    <string name="editTransaction_save">Save</string>
+    <string name="editTransaction_ok">Changes saved</string>
+    <string name="editTransaction_error">Error during saving</string>
+    <string name="deleteTransaction_title">Delete</string>
+    <string name="deleteTransaction_description">Are you sure you want to delete this transaction?</string>
+    <string name="deleteTransaction_ok">Transaction deleted</string>
+    <string name="deleteTransaction_error">Error during transaction deleting</string>
 
     <!-- Categories -->
     <string name="categories_title">Categories</string>
@@ -46,6 +57,14 @@
     <string name="addCategory_input_name_hint">Name</string>
     <string name="addCategory_ok">Category added</string>
     <string name="addCategory_error">Error during category adding</string>
+    <string name="deleteCategory_title">Delete category</string>
+    <string name="deleteCategory_description">Are you sure you want to delete this category?</string>
+    <string name="deleteCategory_ok">Category deleted</string>
+    <string name="deleteCategory_error">Error during deleting</string>
+
+    <!-- Import/Export -->
+    <string name="import_title">Import</string>
+    <string name="export_title">Export</string>
 
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>

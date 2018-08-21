@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 
@@ -24,40 +25,39 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
-    private DrawerLayout drawerLayout;
+    private DrawerLayout mDrawerLayout;
+    private Menu mDrawerMenu;
 
     private boolean viewIsAtHome = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.setContentView(R.layout.main_activity);
 
-        Toolbar toolbar = (Toolbar) this.findViewById(R.id.toolbar_main);
+        Toolbar toolbar = (Toolbar) this.findViewById(R.id.mainToolbar);
         this.setSupportActionBar(toolbar);
 
-        drawerLayout = (DrawerLayout) this.findViewById(R.id.layout_main);
+        this.mDrawerLayout = (DrawerLayout) this.findViewById(R.id.mainLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+                this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        this.mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) this.findViewById(R.id.navigation_drawer);
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.navigationDrawer);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().findItem(R.id.navigation_home).setChecked(true);
-
-        this.displayView(R.id.navigation_home);
+        this.mDrawerMenu = navigationView.getMenu();
+        this.onNavigationItemSelected(this.mDrawerMenu.findItem(R.id.navigationHome));
 
         Log.d(TAG, "activity created");
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (!viewIsAtHome) {
-            this.displayView(R.id.navigation_home);
+            this.onNavigationItemSelected(this.mDrawerMenu.findItem(R.id.navigationHome));
         } else {
             super.onBackPressed();
         }
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
         this.displayView(item.getItemId());
+        this.mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -75,39 +76,34 @@ public class MainActivity extends AppCompatActivity
      * @param id Item identifier
      */
     public void displayView(int id) {
-        Fragment fragment = null;
+        Fragment fragment;
         String title = this.getString(R.string.app_name);
 
-        viewIsAtHome = false;
+        this.viewIsAtHome = false;
         switch (id) {
-            case R.id.navigation_home:
-                viewIsAtHome = true;
-                fragment = new HomeFragment();
-                break;
-            case R.id.navigation_transactions:
+            case R.id.navigationSettings:
+                this.startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                return;
+            case R.id.navigationTransactions:
                 fragment = new TransactionsFragment();
                 title = this.getString(R.string.transactions_title);
                 break;
-            case R.id.navigation_categories:
+            case R.id.navigationCategories:
                 fragment = new CategoriesFragment();
                 title = this.getString(R.string.categories_title);
                 break;
-            case R.id.navigation_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                break;
+            case R.id.navigationHome:
+            default:
+                this.viewIsAtHome = true;
+                fragment = new HomeFragment();
         }
-
-        if (fragment != null) {
-            this.getFragmentManager().beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-        }
-
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.mainContent, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
         if (this.getSupportActionBar() != null) {
             this.getSupportActionBar().setTitle(title);
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
 }

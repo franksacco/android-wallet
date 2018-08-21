@@ -31,12 +31,14 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
      * Dataset
      */
     private ArrayList<Transaction> mDataset = new ArrayList<>();
-
+    /**
+     * Application context
+     */
+    private Context mContext;
     /**
      * Currency manager instance
      */
     private CurrencyManager mCurrencyManager;
-
     /**
      * Optional on click listener
      */
@@ -48,8 +50,10 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
      * @param listener Optional on click listener
      */
     public TransactionsAdapter(Context context, @Nullable OnItemClickListener listener) {
+        this.mContext = context;
         this.mCurrencyManager = new CurrencyManager(context);
         this.mListener = listener;
+        this.setHasStableIds(true);
     }
 
     /**
@@ -71,18 +75,22 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     }
 
     @Override
+    public long getItemId(int position) {
+        return this.mDataset.get(position).getId();
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Transaction t = this.mDataset.get(position);
 
-        // todo write payment type
-        holder.setTitle(t.getCategory().getName() + " (" + t.getPaymentTypeId() + ")");
+        holder.setTitle(t.getCategory().getName() + " (" + t.getPaymentType(this.mContext) + ")");
         holder.setSubtitle(t.getNotes());
         holder.setIcon(t.getCategory().getIconIdentifier());
         holder.setMeta(DateFormat.format("HH:mm", t.getDateTime()).toString());
-        double amount = mCurrencyManager.convertToPreferred(t.getAmount());
+        double amount = this.mCurrencyManager.convertToPreferred(t.getAmount());
         holder.setSecondaryText(
                 String.format(Locale.getDefault(), "%+.2f", amount)
-                        + mCurrencyManager.getPreferredSymbol(),
+                        + this.mCurrencyManager.getPreferredSymbol(),
                 t.getAmount() < 0 ? Color.parseColor("#f44336")
                         : Color.parseColor("#4caf50"));
     }

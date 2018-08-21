@@ -14,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Helper class for categories management in database
  */
+@SuppressWarnings("WeakerAccess")
 public class CategoriesManager {
 
     private static final String TAG = "CategoriesManager";
@@ -23,6 +24,7 @@ public class CategoriesManager {
     public static final String ID_COL = "id";
     public static final String ICON_COL = "icon";
     public static final String NAME_COL = "name";
+    public static final String DELETED_COL = "deleted";
 
     public static final String[] ALL_COLUMNS = {
             ID_COL,
@@ -33,15 +35,14 @@ public class CategoriesManager {
     /**
      * Instance of database helper
      */
-    private DatabaseOpenHelper db;
+    private DatabaseOpenHelper mDatabaseHelper;
 
     /**
      * Categories manager initialization
      * @param context Application context
      */
     public CategoriesManager(Context context) {
-        this.db = DatabaseOpenHelper.getInstance(context);
-        Log.d(TAG, "created");
+        this.mDatabaseHelper = DatabaseOpenHelper.getInstance(context);
     }
 
     /**
@@ -52,7 +53,8 @@ public class CategoriesManager {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
                 + ICON_COL + " TEXT NOT NULL DEFAULT 'ic_style_white_24dp', "
-                + NAME_COL + " TEXT NOT NULL"
+                + NAME_COL + " TEXT NOT NULL, "
+                + DELETED_COL + " BOOLEAN NOT NULL DEFAULT 0"
                 + ");");
         Log.d(TAG, "table created");
 
@@ -89,10 +91,29 @@ public class CategoriesManager {
         db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
                 + "VALUES ('ic_local_airport_white_24dp', 'Aereo');");
         db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_local_grocery_store_white_24dp', 'Supermercato');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_local_mall_white_24dp', 'Abbigliamento');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_devices_other_white_24dp', 'Elettronica');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_local_hospital_white_24dp', 'Farmacia');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_local_movies_white_24dp', 'Tempo libero');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_fitness_center_white_24dp', 'Fitness');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_hotel_white_24dp', 'Hotel');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_wb_incandescent_white_24dp', 'Bollette/affitto');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_home_white_24dp', 'Casa/giardino');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
                 + "VALUES ('ic_build_white_24dp', 'Manutenzione');");
-        /*
-         * todo add all default categories
-         */
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_work_white_24dp', 'Stipendio');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (" + ICON_COL + ", " + NAME_COL + ") "
+                + "VALUES ('ic_card_giftcard_white_24dp', 'Regalo');");
     }
 
     /**
@@ -118,10 +139,10 @@ public class CategoriesManager {
         values.put(ICON_COL, category.getIcon());
         values.put(NAME_COL, category.getName());
 
-        SQLiteDatabase db = this.db.getWritableDatabase();
+        SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, values);
-        Log.d(TAG, "inserted category with id " + id);
         db.close();
+        Log.d(TAG, "inserted category with id " + id);
         return id;
     }
 
@@ -139,7 +160,12 @@ public class CategoriesManager {
     public ArrayList<Category> select(String[] columns, String where,
                                        String[] whereParams, String groupBy,
                                        String having, String orderBy, String limit) {
-        SQLiteDatabase db = this.db.getReadableDatabase();
+        if (where == null) {
+            where = DELETED_COL + " = 0";
+        } else {
+            where += " AND " + DELETED_COL + " = 0";
+        }
+        SQLiteDatabase db = this.mDatabaseHelper.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, columns, where, whereParams,
                 groupBy, having, orderBy, limit);
         cursor.moveToFirst();
@@ -152,6 +178,23 @@ public class CategoriesManager {
         cursor.close();
         db.close();
         return list;
+    }
+
+    /**
+     * Delete category from database
+     * @param category Category object to be deleted
+     * @return {@code true} if query affects only one row, {@code false} otherwise
+     */
+    public boolean delete(Category category) {
+        ContentValues values = new ContentValues();
+        values.put(DELETED_COL, 1);
+
+        SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
+        int result = db.update(TABLE_NAME, values, ID_COL + " = ?",
+                new String[]{String.valueOf(category.getId())});
+        db.close();
+        Log.d(TAG, "deleted category with id " + category.getId());
+        return result == 1;
     }
 
 }

@@ -45,7 +45,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
      */
     private DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Log.d(TAG, "created");
+        Log.d(TAG, "instance created");
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         CategoriesManager.onCreate(db);
         TransactionsManager.onCreate(db);
 
-        Log.d(TAG, "database created");
+        Log.d(TAG, "=== database created ===");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         CategoriesManager.onUpgrade(db);
         TransactionsManager.onUpgrade(db);
 
-        Log.d(TAG, "database upgraded");
+        Log.d(TAG, "=== database upgraded ===");
     }
 
 }

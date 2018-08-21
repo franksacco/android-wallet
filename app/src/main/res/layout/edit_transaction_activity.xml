@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/addTransactionLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editTransactionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddTransactionActivity">
+    tools:context=".EditTransactionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppBaseTheme.AppBarOverlay">
         <android.support.v7.widget.Toolbar
-            android:id="@+id/addTransactionToolbar"
+            android:id="@+id/editTransactionToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -36,14 +36,14 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <ImageView
-                    android:id="@+id/addTransaction_icon_transactionType"
+                    android:id="@+id/editTransaction_icon_transactionType"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:contentDescription="@null" />
                 <Spinner
-                    android:id="@+id/addTransaction_input_transactionType"
+                    android:id="@+id/editTransaction_input_transactionType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dialog" />
@@ -68,7 +68,7 @@
                     android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_today_black_24dp" />
                 <TextView
-                    android:id="@+id/addTransaction_input_date"
+                    android:id="@+id/editTransaction_input_date"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
@@ -76,7 +76,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/textTitle" />
                 <TextView
-                    android:id="@+id/addTransaction_input_time"
+                    android:id="@+id/editTransaction_input_time"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
@@ -99,7 +99,7 @@
                     android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_style_black_24dp" />
                 <Spinner
-                    android:id="@+id/addTransaction_input_category"
+                    android:id="@+id/editTransaction_input_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dialog" />
@@ -113,7 +113,9 @@
                 android:paddingTop="24dp"
                 android:paddingBottom="24dp"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingEnd="16dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -122,7 +124,7 @@
                     android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_attach_money_black_24dp" />
                 <EditText
-                    android:id="@+id/addTransaction_input_amount"
+                    android:id="@+id/editTransaction_input_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addTransaction_input_amount_hint"
@@ -130,7 +132,7 @@
                     android:background="@null" />
             </LinearLayout>
             <Spinner
-                android:id="@+id/addTransaction_input_currency"
+                android:id="@+id/editTransaction_input_currency"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:layout_marginStart="64dp"
@@ -153,7 +155,7 @@
                     android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_subject_black_24dp" />
                 <EditText
-                    android:id="@+id/addTransaction_input_notes"
+                    android:id="@+id/editTransaction_input_notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addTransaction_input_notes_hint"
@@ -175,7 +177,7 @@
                     android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_payment_black_24dp" />
                 <Spinner
-                    android:id="@+id/addTransaction_input_paymentType"
+                    android:id="@+id/editTransaction_input_paymentType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dialog" />

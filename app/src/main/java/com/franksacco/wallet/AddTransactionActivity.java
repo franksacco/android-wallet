@@ -1,16 +1,13 @@
 package com.franksacco.wallet;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +47,19 @@ public class AddTransactionActivity extends AppCompatActivity
 
     private static final String TAG = "AddTransactionActivity";
 
+    /**
+     * Activity request code
+     */
+    public static final int REQUEST_CODE = 100;
+    /**
+     * Result code when transaction is inserted successfully
+     */
+    public static final int RESULT_SAVED = 101;
+    /**
+     * Result code when an error occur during inserting
+     */
+    public static final int RESULT_ERROR = 102;
+
     private ImageView mTransactionTypeIcon;
     private TextView mDateText;
     private TextView mTimeText;
@@ -63,12 +73,10 @@ public class AddTransactionActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.setContentView(R.layout.add_transaction_activity);
 
-        Toolbar toolbar = (Toolbar) this.findViewById(R.id.toolbar_main);
+        Toolbar toolbar = (Toolbar) this.findViewById(R.id.addTransactionToolbar);
         this.setSupportActionBar(toolbar);
-
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -87,7 +95,7 @@ public class AddTransactionActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.getMenuInflater().inflate(R.menu.save_transaction, menu);
+        this.getMenuInflater().inflate(R.menu.add_transaction, menu);
         return true;
     }
 
@@ -102,21 +110,27 @@ public class AddTransactionActivity extends AppCompatActivity
             case android.R.id.home:
                 this.exitWithoutSaving();
                 return true;
-            case R.id.action_save_record:
+            case R.id.addTransactionButton:
                 EditText amountInput =
                         (EditText) this.findViewById(R.id.addTransaction_input_amount);
-                double amount = Double.parseDouble(amountInput.getText().toString());
-                CurrencyManager currencyManager = new CurrencyManager(getApplicationContext());
-                amount = mTransactionType * currencyManager.convertFrom(mCurrencyId, amount);
+                double amount;
+                try {
+                    amount = Double.parseDouble(amountInput.getText().toString());
+                } catch (NumberFormatException e) {
+                    Snackbar.make(this.findViewById(R.id.addTransactionLayout),
+                            R.string.addTransaction_amountError, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+                CurrencyManager cm = new CurrencyManager(getApplicationContext());
+                amount = mTransactionType * cm.convertFrom(mCurrencyId, amount);
 
                 EditText notesInput = (EditText) this.findViewById(R.id.addTransaction_input_notes);
-                String notes = notesInput.getText().toString().trim();
+                String notes = notesInput.getText().toString();
 
-                TransactionsManager helper = new TransactionsManager(this);
-                Long id = helper.insert(
+                Long id = new TransactionsManager(this).insert(
                         new Transaction(mCategory, amount, mPaymentType, mDateTime, notes));
 
-                this.setResult(id > 0 ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+                this.setResult(id > 0 ? RESULT_SAVED : RESULT_ERROR);
                 this.finish();
                 return true;
         }
@@ -128,7 +142,7 @@ public class AddTransactionActivity extends AppCompatActivity
      */
     private void initTransactionTypeSpinner() {
         Spinner spinner = (Spinner) this.findViewById(R.id.addTransaction_input_transactionType);
-        mTransactionTypeIcon =
+        AddTransactionActivity.this.mTransactionTypeIcon =
                 (ImageView) this.findViewById(R.id.addTransaction_icon_transactionType);
 
         spinner.setAdapter(ArrayAdapter.createFromResource(this,
@@ -138,9 +152,9 @@ public class AddTransactionActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mTransactionType = position == 0 ? -1 : 1 ;
-                int icon = position == 0 ? R.drawable.ic_remove_circle_red_900_24dp
-                        : R.drawable.ic_add_circle_green_900_24dp ;
+                AddTransactionActivity.this.mTransactionType = (position == 0 ? -1 : 1);
+                int icon = (position == 0 ? R.drawable.ic_remove_circle_red_900_24dp
+                        : R.drawable.ic_add_circle_green_900_24dp);
                 AddTransactionActivity.this.mTransactionTypeIcon.setImageResource(icon);
                 Log.d(TAG, "selected transaction type " + position);
             }
@@ -235,7 +249,7 @@ public class AddTransactionActivity extends AppCompatActivity
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         this.mDateTime.set(year, month, dayOfMonth);
-        Log.d(TAG, "date changed to " + mDateTime.toString());
+        Log.d(TAG, "date changed to " + year + "-" + month + "-" + dayOfMonth);
         this.mDateText.setText(DateFormat.format("EEE dd MMM yyyy", mDateTime));
     }
 
@@ -243,7 +257,7 @@ public class AddTransactionActivity extends AppCompatActivity
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         this.mDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
         this.mDateTime.set(Calendar.MINUTE, minute);
-        Log.d(TAG, "time changed to " + mDateTime.toString());
+        Log.d(TAG, "time changed to " + hourOfDay + ":" + minute);
         this.mTimeText.setText(DateFormat.format("HH:mm", mDateTime));
     }
 
@@ -258,8 +272,8 @@ public class AddTransactionActivity extends AppCompatActivity
         }
 
         void setItems(ArrayList<Category> items) {
-            addAll(items);
-            notifyDataSetChanged();
+            this.addAll(items);
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -270,7 +284,7 @@ public class AddTransactionActivity extends AppCompatActivity
                 view = (LinearLayout) getLayoutInflater()
                         .inflate(R.layout.item_one_line, parent, false);
             }
-            Category category = getItem(position);
+            Category category = this.getItem(position);
             if (category == null) {
                 return view;
             }
@@ -290,7 +304,7 @@ public class AddTransactionActivity extends AppCompatActivity
                 view = (LinearLayout) getLayoutInflater()
                         .inflate(R.layout.spinner_view, parent, false);
             }
-            Category category = getItem(position);
+            Category category = this.getItem(position);
             if (category == null) {
                 return view;
             }
@@ -304,7 +318,7 @@ public class AddTransactionActivity extends AppCompatActivity
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            Category category = getItem(position);
+            Category category = this.getItem(position);
             if (category != null) {
                 AddTransactionActivity.this.mCategory = category;
                 Log.d(TAG, "selected category " + category.getId());
@@ -405,27 +419,15 @@ public class AddTransactionActivity extends AppCompatActivity
      * Ask confirmation for exiting without saving.
      */
     private void exitWithoutSaving() {
-        DialogFragment dialog = new ConfirmExitDialog();
-        dialog.show(this.getFragmentManager(), "confirm_exit");
-    }
-
-    /**
-     * Dialog for exit confirmation
-     */
-    public static class ConfirmExitDialog extends DialogFragment {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-            builder.setTitle(R.string.confirmExit_dialog_title)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            NavUtils.navigateUpFromSameTask(getActivity());
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null);
-            return builder.create();
-        }
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.confirmExit_dialog_title)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        AddTransactionActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null).create()
+                .show();
     }
 
 }

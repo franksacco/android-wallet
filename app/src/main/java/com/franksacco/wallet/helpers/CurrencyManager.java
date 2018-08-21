@@ -75,7 +75,7 @@ public class CurrencyManager {
 
         String preferredCode = preferences.getString(PREFERRED_CURRENCY_PREFERENCE, "EUR");
         int index = Arrays.asList(CODES).indexOf(preferredCode);
-        this.mPreferredIndex = index >= 0 ? index : 0;
+        this.mPreferredIndex = index > 0 ? index : 0;
 
         if (!preferences.contains(CHANGE_RATES_PREFERENCE)) {
             this.mChangeRates = DEFAULT_CURRENCY_RATES;

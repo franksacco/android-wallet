@@ -1,6 +1,5 @@
 package com.franksacco.wallet;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -18,29 +17,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.franksacco.wallet.helpers.CurrencyManager;
 import com.franksacco.wallet.helpers.DatabaseOpenHelper;
 import com.franksacco.wallet.helpers.TransactionsManager;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
+import java.util.Locale;
+
 
 /**
- * Home fragment view
+ * Home fragment class
  */
 @SuppressWarnings("RedundantCast")
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
 
+    public HomeFragment() {}
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
 
-        FloatingActionButton fab_add_transaction =
+        FloatingActionButton fabAddTransaction =
                 (FloatingActionButton) view.findViewById(R.id.addTransactionFab);
-        fab_add_transaction.setOnClickListener(new View.OnClickListener() {
+        fabAddTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(
@@ -51,14 +53,14 @@ public class HomeFragment extends Fragment {
 
         new LoadStatistics(this).execute();
 
-        Log.d(TAG, "view created");
+        Log.i(TAG, "view created");
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AddTransactionActivity.REQUEST_CODE) {
-            Log.d(TAG, "AddTransaction activity finished with code " + resultCode);
+            Log.i(TAG, "AddTransaction activity finished with code " + resultCode);
             if (resultCode == AddTransactionActivity.RESULT_SAVED) {
                 new LoadStatistics(this).execute();
                 Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
@@ -77,11 +79,10 @@ public class HomeFragment extends Fragment {
 
         private WeakReference<HomeFragment> mReference;
 
-        LoadStatistics(HomeFragment context) {
+        private LoadStatistics(HomeFragment context) {
             this.mReference = new WeakReference<>(context);
         }
 
-        @SuppressLint("DefaultLocale")
         @Override
         protected String[] doInBackground(Void... voids) {
             HomeFragment fragment = this.mReference.get();
@@ -92,33 +93,36 @@ public class HomeFragment extends Fragment {
             double[] values = new double[7];
             SQLiteDatabase db = DatabaseOpenHelper.getInstance(activity).getReadableDatabase();
 
-            Cursor cursor1 = db.rawQuery("SELECT TOTAL(" + TransactionsManager.AMOUNT_COL +
-                    ") FROM " + TransactionsManager.TABLE_NAME + ";", null);
+            Cursor cursor1 = db.rawQuery("SELECT TOTAL(" + TransactionsManager.AMOUNT_COL
+                    + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                    + TransactionsManager.TABLE_NAME + ";", null);
             cursor1.moveToFirst();
             values[0] = cursor1.getDouble(0);
             cursor1.close();
 
-            Cursor cursor2 = db.rawQuery("SELECT TOTAL(" + TransactionsManager.AMOUNT_COL +
-                    ") FROM " + TransactionsManager.TABLE_NAME + " WHERE " +
-                    TransactionsManager.AMOUNT_COL + " >= ?;", new String[]{"0"});
+            Cursor cursor2 = db.rawQuery("SELECT TOTAL(" + TransactionsManager.AMOUNT_COL
+                    + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                    + TransactionsManager.TABLE_NAME + " WHERE "
+                    + TransactionsManager.AMOUNT_COL + " >= ?;", new String[]{"0"});
             cursor2.moveToFirst();
             values[1] = cursor2.getDouble(0);
             cursor2.close();
 
-            Cursor cursor3 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL +
-                    ") FROM " + TransactionsManager.TABLE_NAME + " WHERE " +
-                    TransactionsManager.AMOUNT_COL + " < ?;", new String[]{"0"});
+            Cursor cursor3 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL
+                    + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                    + TransactionsManager.TABLE_NAME + " WHERE "
+                    + TransactionsManager.AMOUNT_COL + " < ?;", new String[]{"0"});
             cursor3.moveToFirst();
             values[2] = cursor3.getDouble(0);
             cursor3.close();
 
             Calendar today = Calendar.getInstance();
-
-            Cursor cursor4 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL +
-                    ") FROM " + TransactionsManager.TABLE_NAME + " WHERE " +
-                    TransactionsManager.AMOUNT_COL + " < ? AND " +
-                    TransactionsManager.DATETIME_COL + " >= ? AND " +
-                    TransactionsManager.DATETIME_COL + " <= ?;",
+            Cursor cursor4 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL
+                            + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                            + TransactionsManager.TABLE_NAME + " WHERE "
+                            + TransactionsManager.AMOUNT_COL + " < ? AND "
+                            + TransactionsManager.DATETIME_COL + " >= ? AND "
+                            + TransactionsManager.DATETIME_COL + " <= ?;",
                     new String[]{"0",
                             DateFormat.format("yyyy-MM-dd 00:00", today).toString(),
                             DateFormat.format("yyyy-MM-dd 23:59", today).toString()});
@@ -128,12 +132,12 @@ public class HomeFragment extends Fragment {
 
             Calendar yesterday = (Calendar) today.clone();
             yesterday.add(Calendar.DAY_OF_MONTH, -1);
-
-            Cursor cursor5 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL +
-                            ") FROM " + TransactionsManager.TABLE_NAME + " WHERE " +
-                            TransactionsManager.AMOUNT_COL + " < ? AND " +
-                            TransactionsManager.DATETIME_COL + " >= ? AND " +
-                            TransactionsManager.DATETIME_COL + " <= ?;",
+            Cursor cursor5 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL
+                            + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                            + TransactionsManager.TABLE_NAME + " WHERE "
+                            + TransactionsManager.AMOUNT_COL + " < ? AND "
+                            + TransactionsManager.DATETIME_COL + " >= ? AND "
+                            + TransactionsManager.DATETIME_COL + " <= ?;",
                     new String[]{"0",
                             DateFormat.format("yyyy-MM-dd 00:00", yesterday).toString(),
                             DateFormat.format("yyyy-MM-dd 23:59", yesterday).toString()});
@@ -143,12 +147,12 @@ public class HomeFragment extends Fragment {
 
             Calendar oneWeekAgo = (Calendar) today.clone();
             oneWeekAgo.add(Calendar.WEEK_OF_YEAR, -1);
-
-            Cursor cursor6 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL +
-                            ") FROM " + TransactionsManager.TABLE_NAME + " WHERE " +
-                            TransactionsManager.AMOUNT_COL + " < ? AND " +
-                            TransactionsManager.DATETIME_COL + " >= ? AND " +
-                            TransactionsManager.DATETIME_COL + " <= ?;",
+            Cursor cursor6 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL
+                            + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                            + TransactionsManager.TABLE_NAME + " WHERE "
+                            + TransactionsManager.AMOUNT_COL + " < ? AND "
+                            + TransactionsManager.DATETIME_COL + " >= ? AND "
+                            + TransactionsManager.DATETIME_COL + " <= ?;",
                     new String[]{"0",
                             DateFormat.format("yyyy-MM-dd 00:00", oneWeekAgo).toString(),
                             DateFormat.format("yyyy-MM-dd 23:59", today).toString()});
@@ -158,12 +162,12 @@ public class HomeFragment extends Fragment {
 
             Calendar oneMonthAgo = (Calendar) today.clone();
             oneMonthAgo.add(Calendar.MONTH, -1);
-
-            Cursor cursor7 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL +
-                            ") FROM " + TransactionsManager.TABLE_NAME + " WHERE " +
-                            TransactionsManager.AMOUNT_COL + " < ? AND " +
-                            TransactionsManager.DATETIME_COL + " >= ? AND " +
-                            TransactionsManager.DATETIME_COL + " <= ?;",
+            Cursor cursor7 = db.rawQuery("SELECT -TOTAL(" + TransactionsManager.AMOUNT_COL
+                            + "*" + TransactionsManager.CHANGE_RATE_COL + ") FROM "
+                            + TransactionsManager.TABLE_NAME + " WHERE "
+                            + TransactionsManager.AMOUNT_COL + " < ? AND "
+                            + TransactionsManager.DATETIME_COL + " >= ? AND "
+                            + TransactionsManager.DATETIME_COL + " <= ?;",
                     new String[]{"0",
                             DateFormat.format("yyyy-MM-dd 00:00", oneMonthAgo).toString(),
                             DateFormat.format("yyyy-MM-dd 23:59", today).toString()});
@@ -173,14 +177,11 @@ public class HomeFragment extends Fragment {
 
             db.close();
 
-            String[] stringValues = new String[7];
-            CurrencyManager currencyManager = new CurrencyManager(activity);
-            String currencySymbol = currencyManager.getPreferredSymbol();
+            String[] outValues = new String[7];
             for (int i = 0; i < 7; i++) {
-                double convertedAmount = currencyManager.convertToPreferred(values[i]);
-                stringValues[i] = String.format("%.2f", convertedAmount) + " " + currencySymbol;
+                outValues[i] = String.format(Locale.getDefault(), "%.2f", values[i]) + " €";
             }
-            return stringValues;
+            return outValues;
         }
 
         @Override

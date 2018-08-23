@@ -1,15 +1,13 @@
 <resources>
     <!-- General -->
     <string name="app_name" translatable="false">MyWallet</string>
-
-    <!-- Words without context -->
     <string name="save">Save</string>
+    <string name="rateDownload_error">Unable to download the exchange rate, make sure you are connected to the internet</string>
 
     <!-- Drawer & Navigation -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_logo" translatable="false">App logo</string>
-    <string name="navigation_home">Home</string>
 
     <!-- Home -->
     <string name="home_title" translatable="false">Home</string>
@@ -49,7 +47,7 @@
     <string name="deleteTransaction_title">Delete</string>
     <string name="deleteTransaction_description">Are you sure you want to delete this transaction?</string>
     <string name="deleteTransaction_ok">Transaction deleted</string>
-    <string name="deleteTransaction_error">Error during transaction deleting</string>
+    <string name="deleteTransaction_error">Error during deleting</string>
 
     <!-- Categories -->
     <string name="categories_title">Categories</string>
@@ -64,19 +62,16 @@
 
     <!-- Import/Export -->
     <string name="import_title">Import</string>
+    <string name="import_text">Select a CSV file to import</string>
+    <string name="import_button">Select file</string>
+    <string name="import_ok">Data imported with success</string>
+    <string name="import_error">Error during importation</string>
     <string name="export_title">Export</string>
-
-    <!-- Settings activity -->
-    <string name="settings_title">Settings</string>
-    <string name="settings_currency_title">Currency</string>
-    <string name="settings_currency_list_title">Preferred currency</string>
-    <string name="settings_currency_update_title">Last currency rates update</string>
-    <string name="settings_data_title">Data management</string>
-    <string name="settings_data_deleteAll_title">Clear all saved data</string>
-    <string name="settings_data_deleteAll_description">All movements, statistics or preferences will be deleted from this device</string>
-    <string name="dialog_confirmDelete_title">Delete all data</string>
-    <string name="dialog_confirmDelete_description">All application data or preferences will be deleted from this device. This action can not be canceled.</string>
-    <string name="deleteAll_ok">All data were deleted</string>
+    <string name="export_text1">Select exportation date range</string>
+    <string name="export_text2">Data will be exported in a CSV file</string>
+    <string name="export_button">Export</string>
+    <string name="export_ok">Data exported with success</string>
+    <string name="export_error">Error during exportation</string>
 
     <!-- Payment types -->
     <string-array name="payment_types">
@@ -122,41 +117,6 @@
         <item>Singapore Dollar (SGD)</item>
         <item>Thai Baht (THB)</item>
         <item>South African Rand (ZAR)</item>
-    </string-array>
-    <string-array name="currency_codes">
-        <item>EUR</item>
-        <item>USD</item>
-        <item>JPY</item>
-        <item>BGN</item>
-        <item>CZK</item>
-        <item>DKK</item>
-        <item>GBP</item>
-        <item>HUF</item>
-        <item>PLN</item>
-        <item>RON</item>
-        <item>SEK</item>
-        <item>CHF</item>
-        <item>ISK</item>
-        <item>NOK</item>
-        <item>HRK</item>
-        <item>RUB</item>
-        <item>TRY</item>
-        <item>AUD</item>
-        <item>BRL</item>
-        <item>CAD</item>
-        <item>CNY</item>
-        <item>HKD</item>
-        <item>IDR</item>
-        <item>ILS</item>
-        <item>INR</item>
-        <item>KRW</item>
-        <item>MXN</item>
-        <item>MYR</item>
-        <item>NZD</item>
-        <item>PHP</item>
-        <item>SGD</item>
-        <item>THB</item>
-        <item>ZAR</item>
     </string-array>
 
 </resources>

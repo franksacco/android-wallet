@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.franksacco.wallet.R;
 
+
 /**
  * This class represent a category entity
  */
@@ -14,26 +15,35 @@ public class Category {
     /**
      * Category database id
      */
-    private int id = 0;
-
+    private int id;
     /**
      * Category icon name
      */
-    private String icon = null;
-
+    private String icon;
     /**
      * Category name
      */
-    private String name = null;
+    private String name;
 
     /**
-     * Category constructors
+     * Create category with default values
      */
-    public Category() {}
-    public Category(String icon, String name) {
-        this.icon = icon;
-        this.name = name;
+    public Category() {
+        this(-1, "ic_style_white_24dp", "");
     }
+    /**
+     * Create a new category with default icon
+     * @param name Category name
+     */
+    public Category(String name) {
+        this(-1, "ic_style_white_24dp", name);
+    }
+    /**
+     * Create a category
+     * @param id Category id
+     * @param icon Category icon
+     * @param name Category name
+     */
     public Category(int id, String icon, String name) {
         this.id = id;
         this.icon = icon;
@@ -47,7 +57,6 @@ public class Category {
     public int getId() {
         return id;
     }
-
     /**
      * Set category id
      * @param id int
@@ -63,7 +72,6 @@ public class Category {
     public String getIcon() {
         return this.icon;
     }
-
     /**
      * Get drawable identifier for category icon
      * @return Icon identifier
@@ -76,7 +84,6 @@ public class Category {
         }
         return R.drawable.ic_style_white_24dp;
     }
-
     /**
      * Set icon string identifier
      * @param icon String
@@ -92,7 +99,6 @@ public class Category {
     public String getName() {
         return this.name;
     }
-
     /**
      * Set name identifier if valid
      * @param name String

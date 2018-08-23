@@ -32,7 +32,7 @@ public class AddCategoryDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         try {
-            mListener = (AddCategoryDialogListener) getTargetFragment();
+            mListener = (AddCategoryDialogListener) this.getTargetFragment();
             if (mListener == null) {
                 throw new ClassCastException();
             }
@@ -41,8 +41,7 @@ public class AddCategoryDialog extends DialogFragment {
         }
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        LinearLayout view = (LinearLayout) inflater.inflate(
-                R.layout.add_category_dialog, null);
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.add_category_dialog, null);
 
         final TextInputEditText input =
                 (TextInputEditText) view.findViewById(R.id.addCategory_input_name);
@@ -61,7 +60,7 @@ public class AddCategoryDialog extends DialogFragment {
                         input.setText("");
                     }
                 });
-        Log.d(TAG, "dialog created");
+        Log.i(TAG, "dialog created");
         return builder.create();
     }
 

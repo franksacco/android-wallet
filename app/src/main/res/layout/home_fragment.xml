@@ -160,13 +160,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="4"
+                        android:weightSum="2"
                         android:layout_margin="16dp"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="1"
                             android:text="@string/home_expenseToday" />
                         <TextView
                             android:id="@+id/expense_today"
@@ -180,13 +180,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="4"
+                        android:weightSum="2"
                         android:layout_margin="16dp"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="1"
                             android:text="@string/home_expenseYesterday" />
                         <TextView
                             android:id="@+id/expense_yesterday"
@@ -200,13 +200,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="4"
+                        android:weightSum="2"
                         android:layout_margin="16dp"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="1"
                             android:text="@string/home_expenseThisWeek" />
                         <TextView
                             android:id="@+id/expense_this_week"
@@ -220,13 +220,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="4"
+                        android:weightSum="2"
                         android:layout_margin="16dp"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="1"
                             android:text="@string/home_expenseThisMonth" />
                         <TextView
                             android:id="@+id/expense_this_month"

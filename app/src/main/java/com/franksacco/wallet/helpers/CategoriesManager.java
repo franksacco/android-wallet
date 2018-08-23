@@ -51,15 +51,15 @@ public class CategoriesManager {
      */
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
-                + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+                + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ICON_COL + " TEXT NOT NULL DEFAULT 'ic_style_white_24dp', "
                 + NAME_COL + " TEXT NOT NULL, "
                 + DELETED_COL + " BOOLEAN NOT NULL DEFAULT 0"
                 + ");");
-        Log.d(TAG, "table created");
+        Log.i(TAG, "table created");
 
         insertDefaultCategories(db);
-        Log.d(TAG, "default categories inserted");
+        Log.i(TAG, "default categories inserted");
     }
 
     /**
@@ -68,7 +68,7 @@ public class CategoriesManager {
      */
     public static void onUpgrade(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        Log.d(TAG, "database upgrade - table dropped");
+        Log.i(TAG, "database upgrade - table dropped");
         onCreate(db);
     }
 
@@ -142,7 +142,7 @@ public class CategoriesManager {
         SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, values);
         db.close();
-        Log.d(TAG, "inserted category with id " + id);
+        Log.i(TAG, "inserted category with id " + id);
         return id;
     }
 
@@ -193,7 +193,7 @@ public class CategoriesManager {
         int result = db.update(TABLE_NAME, values, ID_COL + " = ?",
                 new String[]{String.valueOf(category.getId())});
         db.close();
-        Log.d(TAG, "deleted category with id " + category.getId());
+        Log.i(TAG, "deleted category with id " + category.getId());
         return result == 1;
     }
 

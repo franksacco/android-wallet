@@ -34,7 +34,14 @@ public class CategoriesFragment extends Fragment
 
     private static final String TAG = "CategoriesFragment";
 
+    /**
+     * Categories adapter for recycler view
+     */
     private CategoriesAdapter mAdapter;
+
+    public CategoriesFragment() {
+
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -82,7 +89,7 @@ public class CategoriesFragment extends Fragment
 
         this.bindAddCategoryFab(view);
 
-        Log.d(TAG, "view created");
+        Log.i(TAG, "view created");
         return view;
     }
 
@@ -117,7 +124,7 @@ public class CategoriesFragment extends Fragment
      */
     private void addCategory(String name) {
         CategoriesManager databaseHelper = new CategoriesManager(getActivity());
-        Category category = new Category("ic_style_white_24dp", name);
+        Category category = new Category(name);
 
         int messageId = R.string.addCategory_ok;
         if (databaseHelper.insert(category) == -1) {

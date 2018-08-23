@@ -2,7 +2,6 @@ package com.franksacco.wallet;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -25,10 +24,13 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
+    /**
+     * Active fragment id in drawer navigation
+     */
+    private int mActiveFragment = R.id.navigationHome;
+
     private DrawerLayout mDrawerLayout;
     private Menu mDrawerMenu;
-
-    private boolean viewIsAtHome = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +49,16 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.navigationDrawer);
         navigationView.setNavigationItemSelectedListener(this);
         this.mDrawerMenu = navigationView.getMenu();
-        this.onNavigationItemSelected(this.mDrawerMenu.findItem(R.id.navigationHome));
 
-        Log.d(TAG, "activity created");
+        this.onNavigationItemSelected(this.mDrawerMenu.findItem(this.mActiveFragment));
+        Log.i(TAG, "activity created");
     }
 
     @Override
     public void onBackPressed() {
         if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (!viewIsAtHome) {
+        } else if (this.mActiveFragment != R.id.navigationHome) {
             this.onNavigationItemSelected(this.mDrawerMenu.findItem(R.id.navigationHome));
         } else {
             super.onBackPressed();
@@ -65,25 +67,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        item.setChecked(true);
-        this.displayView(item.getItemId());
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
+        item.setChecked(true);
 
-    /**
-     * Replace actual content fragment with another
-     * @param id Item identifier
-     */
-    public void displayView(int id) {
-        Fragment fragment;
+        int id = item.getItemId();
+        Fragment fragment = null;
         String title = this.getString(R.string.app_name);
 
-        this.viewIsAtHome = false;
-        switch (id) {
-            case R.id.navigationSettings:
-                this.startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return;
+         switch (id) {
+            case R.id.navigationHome:
+                fragment = new HomeFragment();
+                break;
             case R.id.navigationTransactions:
                 fragment = new TransactionsFragment();
                 title = this.getString(R.string.transactions_title);
@@ -92,18 +86,26 @@ public class MainActivity extends AppCompatActivity
                 fragment = new CategoriesFragment();
                 title = this.getString(R.string.categories_title);
                 break;
-            case R.id.navigationHome:
-            default:
-                this.viewIsAtHome = true;
-                fragment = new HomeFragment();
+            case R.id.navigationImport:
+                fragment = new ImportFragment();
+                title = this.getString(R.string.import_title);
+                break;
+            case R.id.navigationExport:
+                fragment = new ExportFragment();
+                title = this.getString(R.string.export_title);
+                break;
         }
-        this.getFragmentManager().beginTransaction()
-                .replace(R.id.mainContent, fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
+        this.mActiveFragment = id;
+        if (fragment != null) {
+            this.getFragmentManager().beginTransaction()
+                    .replace(R.id.mainContent, fragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
         if (this.getSupportActionBar() != null) {
             this.getSupportActionBar().setTitle(title);
         }
+        return true;
     }
 
 }

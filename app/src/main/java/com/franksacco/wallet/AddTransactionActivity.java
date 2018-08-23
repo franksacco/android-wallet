@@ -31,6 +31,7 @@ import android.widget.TimePicker;
 import com.franksacco.wallet.entities.Transaction;
 import com.franksacco.wallet.helpers.CategoriesManager;
 import com.franksacco.wallet.entities.Category;
+import com.franksacco.wallet.helpers.ChangeRateDownloader;
 import com.franksacco.wallet.helpers.CurrencyManager;
 import com.franksacco.wallet.helpers.TransactionsManager;
 
@@ -43,7 +44,8 @@ import java.util.Calendar;
  */
 @SuppressWarnings("RedundantCast")
 public class AddTransactionActivity extends AppCompatActivity
-        implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+        implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+        ChangeRateDownloader.ChangeRateDownloaderListener {
 
     private static final String TAG = "AddTransactionActivity";
 
@@ -64,11 +66,12 @@ public class AddTransactionActivity extends AppCompatActivity
     private TextView mDateText;
     private TextView mTimeText;
 
-    private int mTransactionType = -1;
-    private Category mCategory = null;
-    private int mCurrencyId = 0;
-    private int mPaymentType = 0;
+    private Transaction mTransaction;
+    private int mTransactionType;
     private Calendar mDateTime = Calendar.getInstance();
+    private Category mCategory;
+    private String mCurrency;
+    private int mPaymentType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +92,7 @@ public class AddTransactionActivity extends AppCompatActivity
         this.initPaymentTypeSpinner();
         this.initDate();
         this.initTime();
-
-        Log.d(TAG, "activity created");
+        Log.i(TAG, "activity created");
     }
 
     @Override
@@ -111,30 +113,68 @@ public class AddTransactionActivity extends AppCompatActivity
                 this.exitWithoutSaving();
                 return true;
             case R.id.addTransactionButton:
-                EditText amountInput =
-                        (EditText) this.findViewById(R.id.addTransaction_input_amount);
-                double amount;
-                try {
-                    amount = Double.parseDouble(amountInput.getText().toString());
-                } catch (NumberFormatException e) {
-                    Snackbar.make(this.findViewById(R.id.addTransactionLayout),
-                            R.string.addTransaction_amountError, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-                CurrencyManager cm = new CurrencyManager(getApplicationContext());
-                amount = mTransactionType * cm.convertFrom(mCurrencyId, amount);
-
-                EditText notesInput = (EditText) this.findViewById(R.id.addTransaction_input_notes);
-                String notes = notesInput.getText().toString();
-
-                Long id = new TransactionsManager(this).insert(
-                        new Transaction(mCategory, amount, mPaymentType, mDateTime, notes));
-
-                this.setResult(id > 0 ? RESULT_SAVED : RESULT_ERROR);
-                this.finish();
+                this.prepareInsert();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void prepareInsert() {
+        EditText amountInput = (EditText) this.findViewById(R.id.addTransaction_input_amount);
+        double amount = (double) this.mTransactionType;
+        try {
+            amount *= Double.parseDouble(amountInput.getText().toString());
+        } catch (NumberFormatException e) {
+            Snackbar.make(this.findViewById(R.id.addTransactionLayout),
+                    R.string.addTransaction_amountError, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        this.findViewById(R.id.addTransactionProgressBar).setVisibility(View.VISIBLE);
+
+        EditText notesInput = (EditText) this.findViewById(R.id.addTransaction_input_notes);
+        String notes = notesInput.getText().toString();
+
+        this.mTransaction = new Transaction(mCategory, mDateTime, amount,
+                this.mCurrency, 1.0, notes, mPaymentType);
+        if (this.mCurrency.equals("EUR")) {
+            this.insert();
+        } else {
+            new ChangeRateDownloader(this, this.mDateTime, this.mCurrency, this)
+                    .execute();
+        }
+    }
+
+    @Override
+    public void onDownloadTerminated(ChangeRateDownloader.Result result) {
+        if (result.getException() != null) {
+            Snackbar.make(this.findViewById(R.id.editTransactionLayout),
+                    R.string.rateDownload_error, Snackbar.LENGTH_LONG).show();
+            return;
+        }
+        this.mTransaction.setChangeRate(1.0 / result.getChangeRate());
+        this.insert();
+    }
+
+    private void insert() {
+        Long id = new TransactionsManager(this).insert(this.mTransaction);
+        this.findViewById(R.id.addTransactionProgressBar).setVisibility(View.GONE);
+        this.setResult(id > 0 ? RESULT_SAVED : RESULT_ERROR);
+        this.finish();
+    }
+
+    /**
+     * Ask confirmation for exiting without saving.
+     */
+    private void exitWithoutSaving() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.confirmExit_dialog_title)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        AddTransactionActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null).create()
+                .show();
     }
 
     /**
@@ -156,14 +196,13 @@ public class AddTransactionActivity extends AppCompatActivity
                 int icon = (position == 0 ? R.drawable.ic_remove_circle_red_900_24dp
                         : R.drawable.ic_add_circle_green_900_24dp);
                 AddTransactionActivity.this.mTransactionTypeIcon.setImageResource(icon);
-                Log.d(TAG, "selected transaction type " + position);
+                Log.i(TAG, "selected transaction type " + position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
-
     /**
      * Initialize category spinner
      */
@@ -180,7 +219,6 @@ public class AddTransactionActivity extends AppCompatActivity
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(adapter);
     }
-
     /**
      * Initialize currency spinner
      */
@@ -193,9 +231,8 @@ public class AddTransactionActivity extends AppCompatActivity
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(adapter);
-        spinner.setSelection(new CurrencyManager(getApplicationContext()).getPreferredIndex());
+        spinner.setSelection(0);
     }
-
     /**
      * Initialize payment type spinner
      */
@@ -209,7 +246,6 @@ public class AddTransactionActivity extends AppCompatActivity
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(adapter);
     }
-
     /**
      * Initialize date text view
      */
@@ -227,7 +263,6 @@ public class AddTransactionActivity extends AppCompatActivity
             }
         });
     }
-
     /**
      * Initialize time text view
      */
@@ -249,7 +284,7 @@ public class AddTransactionActivity extends AppCompatActivity
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         this.mDateTime.set(year, month, dayOfMonth);
-        Log.d(TAG, "date changed to " + year + "-" + month + "-" + dayOfMonth);
+        Log.i(TAG, "date changed to " + year + "-" + month + "-" + dayOfMonth);
         this.mDateText.setText(DateFormat.format("EEE dd MMM yyyy", mDateTime));
     }
 
@@ -257,7 +292,7 @@ public class AddTransactionActivity extends AppCompatActivity
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         this.mDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
         this.mDateTime.set(Calendar.MINUTE, minute);
-        Log.d(TAG, "time changed to " + hourOfDay + ":" + minute);
+        Log.i(TAG, "time changed to " + hourOfDay + ":" + minute);
         this.mTimeText.setText(DateFormat.format("HH:mm", mDateTime));
     }
 
@@ -321,7 +356,7 @@ public class AddTransactionActivity extends AppCompatActivity
             Category category = this.getItem(position);
             if (category != null) {
                 AddTransactionActivity.this.mCategory = category;
-                Log.d(TAG, "selected category " + category.getId());
+                Log.i(TAG, "selected category " + category.getId());
             }
         }
 
@@ -343,7 +378,7 @@ public class AddTransactionActivity extends AppCompatActivity
         @Override
         public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
-            if(view == null) {
+            if (view == null) {
                 view = (LinearLayout) getLayoutInflater()
                         .inflate(R.layout.spinner_view, parent, false);
             }
@@ -353,7 +388,6 @@ public class AddTransactionActivity extends AppCompatActivity
             }
             TextView hint = (TextView) view.findViewById(R.id.spinnerView_hint);
             hint.setText(R.string.addTransaction_input_currency_hint);
-
             TextView textView = (TextView) view.findViewById(R.id.spinnerView_value);
             textView.setText(currency);
             return view;
@@ -361,11 +395,9 @@ public class AddTransactionActivity extends AppCompatActivity
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String currency = getItem(position);
-            if (currency != null) {
-                AddTransactionActivity.this.mCurrencyId = position;
-                Log.d(TAG, "selected currency " + currency);
-            }
+            String code = CurrencyManager.getCode(position);
+            AddTransactionActivity.this.mCurrency = code;
+            Log.i(TAG, "selected currency " + code);
         }
 
         @Override
@@ -407,27 +439,12 @@ public class AddTransactionActivity extends AppCompatActivity
             String paymentType = getItem(position);
             if (paymentType != null) {
                 AddTransactionActivity.this.mPaymentType = position;
-                Log.d(TAG, "selected payment type " + paymentType);
+                Log.i(TAG, "selected payment type " + paymentType);
             }
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {}
-    }
-
-    /**
-     * Ask confirmation for exiting without saving.
-     */
-    private void exitWithoutSaving() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.confirmExit_dialog_title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        AddTransactionActivity.super.onBackPressed();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null).create()
-                .show();
     }
 
 }

@@ -1,11 +1,11 @@
 <resources>
-    <!-- Words without context -->
+    <!-- General -->
     <string name="save">Salva</string>
+    <string name="rateDownload_error">Impossibile scaricare il tasso di cambio, assicurati di essere connesso ad internet</string>
 
     <!-- Drawer & Navigation -->
     <string name="drawer_open">Apri il menù di navigazione</string>
     <string name="drawer_close">Chiudi il menù di navigazione</string>
-    <string name="navigation_home">Home</string>
 
     <!-- Home -->
     <string name="home_balance">Saldo</string>
@@ -59,19 +59,16 @@
 
     <!-- Import/Export -->
     <string name="import_title">Importa</string>
+    <string name="import_text">Seleziona un file CSV da importare</string>
+    <string name="import_button">Seleziona file</string>
+    <string name="import_ok">Dati importati con successo</string>
+    <string name="import_error">Errore durante l\'importazione</string>
     <string name="export_title">Esporta</string>
-
-    <!-- Settings activity -->
-    <string name="settings_title">Impostazioni</string>
-    <string name="settings_currency_list_title">Valuta preferita</string>
-    <string name="settings_currency_title">Valuta</string>
-    <string name="settings_currency_update_title">Ultimo aggiornamento dei tassi di cambio</string>
-    <string name="settings_data_title">Gestione dati</string>
-    <string name="settings_data_deleteAll_title">Cancella tutti i dati salvati</string>
-    <string name="settings_data_deleteAll_description">Tutti i movimenti, statistiche o preferenze verrano eliminati da questo dispositivo</string>
-    <string name="dialog_confirmDelete_title">Elimina tutti i dati</string>
-    <string name="dialog_confirmDelete_description">Tutti i dati o preferenze dell\'applicazione verranno eliminati da questo dispositivo. Questa azione non può essere annullata.</string>
-    <string name="deleteAll_ok">Tutti i dati sono stati eliminati</string>
+    <string name="export_text1">Seleziona il periodo di esportazione</string>
+    <string name="export_text2">I dati verranno esportati in un file CSV</string>
+    <string name="export_button">Esporta</string>
+    <string name="export_ok">Dati esportati con successo</string>
+    <string name="export_error">Errore durante l\'esportazione</string>
 
     <!-- Payment types -->
     <string-array name="payment_types">

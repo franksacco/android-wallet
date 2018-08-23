@@ -140,14 +140,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
      * Interface for manage action click
      */
     public interface OnActionClickListener {
-
         /**
          * Method called on action view click
          * @param category Category object associated to row clicked
          * @param position Item position
          */
         void OnActionClick(Category category, int position);
-
     }
 
 }

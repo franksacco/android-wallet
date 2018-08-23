@@ -40,9 +40,14 @@ public class TransactionsFragment extends Fragment
      * Transactions adapter for recycler view
      */
     private TransactionsAdapter mAdapter;
-
+    /**
+     * Current date
+     */
     private Calendar mDate = Calendar.getInstance();
+
     private TextView mDateTextView;
+
+    public TransactionsFragment() {}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -72,14 +77,14 @@ public class TransactionsFragment extends Fragment
         this.initControlBar(view);
         new LoadTransactions(this).execute();
 
-        Log.d(TAG, "view created");
+        Log.i(TAG, "view created");
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EditTransactionActivity.REQUEST_CODE) {
-            Log.d(TAG, "EditTransaction activity finished with code " + resultCode);
+            Log.i(TAG, "EditTransaction activity finished with code " + resultCode);
             if (resultCode == EditTransactionActivity.RESULT_UPDATED) {
                 new LoadTransactions(this).execute();
             } else if (resultCode == EditTransactionActivity.RESULT_DELETED) {
@@ -150,7 +155,7 @@ public class TransactionsFragment extends Fragment
 
         private WeakReference<TransactionsFragment> mReference;
 
-        LoadTransactions(TransactionsFragment context) {
+        private LoadTransactions(TransactionsFragment context) {
             this.mReference = new WeakReference<>(context);
         }
 

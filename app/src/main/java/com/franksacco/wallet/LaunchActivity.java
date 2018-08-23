@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+
+/**
+ * Launch activity class
+ */
 public class LaunchActivity extends AppCompatActivity {
 
     private static final String TAG = "LaunchActivity";
@@ -13,10 +17,8 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // todo check for new change rates
-
-        Log.d(TAG, "launch routine finished");
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        Log.i(TAG, "launch terminated");
+        this.startActivity(new Intent(this, MainActivity.class));
     }
+
 }

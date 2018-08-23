@@ -36,10 +36,6 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
      */
     private Context mContext;
     /**
-     * Currency manager instance
-     */
-    private CurrencyManager mCurrencyManager;
-    /**
      * Optional on click listener
      */
     private OnItemClickListener mListener;
@@ -51,7 +47,6 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
      */
     public TransactionsAdapter(Context context, @Nullable OnItemClickListener listener) {
         this.mContext = context;
-        this.mCurrencyManager = new CurrencyManager(context);
         this.mListener = listener;
         this.setHasStableIds(true);
     }
@@ -87,10 +82,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         holder.setSubtitle(t.getNotes());
         holder.setIcon(t.getCategory().getIconIdentifier());
         holder.setMeta(DateFormat.format("HH:mm", t.getDateTime()).toString());
-        double amount = this.mCurrencyManager.convertToPreferred(t.getAmount());
         holder.setSecondaryText(
-                String.format(Locale.getDefault(), "%+.2f", amount)
-                        + this.mCurrencyManager.getPreferredSymbol(),
+                String.format(Locale.getDefault(), "%+.2f", t.getAmount())
+                        + CurrencyManager.getSymbol(t.getCurrencyCode()),
                 t.getAmount() < 0 ? Color.parseColor("#f44336")
                         : Color.parseColor("#4caf50"));
     }

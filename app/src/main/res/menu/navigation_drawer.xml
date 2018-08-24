@@ -26,13 +26,13 @@
         android:id="@+id/navigationBottom"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/navigationImport"
-            android:icon="@drawable/ic_file_download_black_24dp"
-            android:title="@string/import_title" />
-        <item
             android:id="@+id/navigationExport"
             android:icon="@drawable/ic_file_upload_black_24dp"
             android:title="@string/export_title" />
+        <item
+            android:id="@+id/navigationImport"
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:title="@string/import_title" />
     </group>
 
 </menu>

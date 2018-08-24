@@ -57,18 +57,23 @@
     <string name="deleteCategory_ok">Categoria eliminata</string>
     <string name="deleteCategory_error">Errore durante l\'eliminazione</string>
 
-    <!-- Import/Export -->
+    <!-- Import -->
     <string name="import_title">Importa</string>
     <string name="import_text">Seleziona un file CSV da importare</string>
     <string name="import_button">Seleziona file</string>
     <string name="import_ok">Dati importati con successo</string>
     <string name="import_error">Errore durante l\'importazione</string>
+
+    <!-- Export -->
     <string name="export_title">Esporta</string>
-    <string name="export_text1">Seleziona il periodo di esportazione</string>
-    <string name="export_text2">I dati verranno esportati in un file CSV</string>
+    <string name="export_text1">Seleziona il periodo di esportazione:</string>
+    <string name="export_text2">altrimenti:</string>
+    <string name="export_text3">I dati verranno esportati in un file CSV</string>
+    <string name="export_checkbox">Esporta tutte le transazioni</string>
     <string name="export_button">Esporta</string>
     <string name="export_ok">Dati esportati con successo</string>
     <string name="export_error">Errore durante l\'esportazione</string>
+    <string name="export_errorDates">La data di inizio deve precedere quella di fine</string>
 
     <!-- Payment types -->
     <string-array name="payment_types">

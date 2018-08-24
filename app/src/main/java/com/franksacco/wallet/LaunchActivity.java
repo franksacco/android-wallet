@@ -18,7 +18,8 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Log.i(TAG, "launch terminated");
-        this.startActivity(new Intent(this, MainActivity.class));
+        this.startActivity(new Intent(this.getApplicationContext(), MainActivity.class));
+        this.finish();
     }
 
 }

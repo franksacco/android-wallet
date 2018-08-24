@@ -83,22 +83,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="altrimenti:"
+                android:text="@string/export_text2"
                 android:textSize="16sp"
                 android:textColor="@color/textDescription" />
             <CheckBox
+                android:id="@+id/exportCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textSize="16sp"
-                android:text="Esporta tutte le transazioni" />
+                android:text="@string/export_checkbox" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:padding="16dp"
-                android:text="@string/export_text2"
+                android:text="@string/export_text3"
                 android:textSize="16sp"
                 android:textColor="@color/textDescription" />
 

@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.app.Fragment;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -89,11 +89,15 @@ public class TransactionsFragment extends Fragment
                 new LoadTransactions(this).execute();
             } else if (resultCode == EditTransactionActivity.RESULT_DELETED) {
                 new LoadTransactions(this).execute();
-                Snackbar.make(this.getActivity().findViewById(R.id.transactionsLayout),
-                        R.string.deleteTransaction_ok, Snackbar.LENGTH_SHORT).show();
+                if (this.getActivity() != null) {
+                    Snackbar.make(this.getActivity().findViewById(R.id.transactionsLayout),
+                            R.string.deleteTransaction_ok, Snackbar.LENGTH_SHORT).show();
+                }
             } else if (resultCode == EditTransactionActivity.RESULT_DELETED_ERROR) {
-                Snackbar.make(this.getActivity().findViewById(R.id.transactionsLayout),
-                        R.string.deleteTransaction_error, Snackbar.LENGTH_SHORT).show();
+                if (this.getActivity() != null) {
+                    Snackbar.make(this.getActivity().findViewById(R.id.transactionsLayout),
+                            R.string.deleteTransaction_error, Snackbar.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -107,11 +111,15 @@ public class TransactionsFragment extends Fragment
         this.mDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (TransactionsFragment.this.getActivity() == null) {
+                    return;
+                }
                 new DatePickerDialog(TransactionsFragment.this.getActivity(),
-                        TransactionsFragment.this,
-                        TransactionsFragment.this.mDate.get(Calendar.YEAR),
-                        TransactionsFragment.this.mDate.get(Calendar.MONTH),
-                        TransactionsFragment.this.mDate.get(Calendar.DAY_OF_MONTH)).show();
+                                TransactionsFragment.this,
+                                TransactionsFragment.this.mDate.get(Calendar.YEAR),
+                                TransactionsFragment.this.mDate.get(Calendar.MONTH),
+                                TransactionsFragment.this.mDate.get(Calendar.DAY_OF_MONTH))
+                        .show();
             }
         });
         view.findViewById(R.id.transactionsPreviousDay)
@@ -164,7 +172,7 @@ public class TransactionsFragment extends Fragment
             TransactionsFragment fragment = this.mReference.get();
             if (fragment == null) return null;
             Activity activity = fragment.getActivity();
-            if (activity.isFinishing()) return null;
+            if (activity == null || activity.isFinishing()) return null;
 
             TransactionsManager manager = new TransactionsManager(activity);
             return manager.select(TransactionsManager.DATETIME_COL + " >= ? AND "

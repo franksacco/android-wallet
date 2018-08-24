@@ -2,14 +2,14 @@ package com.franksacco.wallet;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,9 +39,7 @@ public class CategoriesFragment extends Fragment
      */
     private CategoriesAdapter mAdapter;
 
-    public CategoriesFragment() {
-
-    }
+    public CategoriesFragment() {}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -72,10 +70,12 @@ public class CategoriesFragment extends Fragment
                                     message = R.string.deleteCategory_ok;
                                     CategoriesFragment.this.mAdapter.removeItem(position);
                                 }
+                                if (CategoriesFragment.this.getActivity() == null) {
+                                    return;
+                                }
                                 Snackbar.make(CategoriesFragment.this.getActivity()
                                                 .findViewById(R.id.categoriesLayout),
-                                        message, Snackbar.LENGTH_SHORT)
-                                        .show();
+                                        message, Snackbar.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, null)
@@ -105,7 +105,9 @@ public class CategoriesFragment extends Fragment
             public void onClick(View view) {
                 DialogFragment dialog = new AddCategoryDialog();
                 dialog.setTargetFragment(CategoriesFragment.this, 1);
-                dialog.show(getFragmentManager(), "addCategory");
+                if (CategoriesFragment.this.getFragmentManager() != null) {
+                    dialog.show(CategoriesFragment.this.getFragmentManager(), "addCategory");
+                }
             }
         });
     }
@@ -132,8 +134,10 @@ public class CategoriesFragment extends Fragment
         } else {
             this.mAdapter.addItem(category);
         }
-        Snackbar.make(getActivity().findViewById(R.id.categoriesLayout),
-                messageId, Snackbar.LENGTH_SHORT).show();
+        if (this.getActivity() != null) {
+            Snackbar.make(this.getActivity().findViewById(R.id.categoriesLayout),
+                    messageId, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -154,7 +158,7 @@ public class CategoriesFragment extends Fragment
             CategoriesFragment fragment = this.mReference.get();
             if (fragment == null) return null;
             Activity activity = fragment.getActivity();
-            if (activity.isFinishing()) return null;
+            if (activity == null || activity.isFinishing()) return null;
 
             return this.mCategoriesManager.select(CategoriesManager.ALL_COLUMNS, null,
                     null, null, null, null, null);

@@ -147,7 +147,7 @@ public class AddTransactionActivity extends AppCompatActivity
     @Override
     public void onDownloadTerminated(ChangeRateDownloader.Result result) {
         if (result.getException() != null) {
-            Snackbar.make(this.findViewById(R.id.editTransactionLayout),
+            Snackbar.make(this.findViewById(R.id.addTransactionLayout),
                     R.string.rateDownload_error, Snackbar.LENGTH_LONG).show();
             return;
         }
@@ -255,11 +255,13 @@ public class AddTransactionActivity extends AppCompatActivity
         this.mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(AddTransactionActivity.this,
+                DatePickerDialog dialog = new DatePickerDialog(AddTransactionActivity.this,
                         AddTransactionActivity.this,
                         AddTransactionActivity.this.mDateTime.get(Calendar.YEAR),
                         AddTransactionActivity.this.mDateTime.get(Calendar.MONTH),
-                        AddTransactionActivity.this.mDateTime.get(Calendar.DAY_OF_MONTH)).show();
+                        AddTransactionActivity.this.mDateTime.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+                dialog.show();
             }
         });
     }

@@ -61,6 +61,7 @@
     <string name="import_title">Importa</string>
     <string name="import_text">Seleziona un file CSV da importare</string>
     <string name="import_button">Seleziona file</string>
+    <string name="import_no_permission">Il permesso di accesso ai file sul dispositivo è richiesto per importare un file</string>
     <string name="import_ok">Dati importati con successo</string>
     <string name="import_error">Errore durante l\'importazione</string>
 
@@ -71,6 +72,7 @@
     <string name="export_text3">I dati verranno esportati in un file CSV</string>
     <string name="export_checkbox">Esporta tutte le transazioni</string>
     <string name="export_button">Esporta</string>
+    <string name="export_no_permission">Il permesso di accesso ai file sul dispositivo è richiesto per esportare un file</string>
     <string name="export_ok">Dati esportati con successo</string>
     <string name="export_error">Errore durante l\'esportazione</string>
     <string name="export_errorDates">La data di inizio deve precedere quella di fine</string>

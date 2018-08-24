@@ -1,9 +1,9 @@
 package com.franksacco.wallet;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         }
         this.mActiveFragment = id;
         if (fragment != null) {
-            this.getFragmentManager().beginTransaction()
+            this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.mainContent, fragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();

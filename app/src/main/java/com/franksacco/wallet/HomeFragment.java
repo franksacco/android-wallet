@@ -1,7 +1,6 @@
 package com.franksacco.wallet;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,11 +63,15 @@ public class HomeFragment extends Fragment {
             Log.i(TAG, "AddTransaction activity finished with code " + resultCode);
             if (resultCode == AddTransactionActivity.RESULT_SAVED) {
                 new LoadStatistics(this).execute();
-                Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
-                        R.string.addTransaction_ok, Snackbar.LENGTH_SHORT).show();
+                if (this.getActivity() != null) {
+                    Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
+                            R.string.addTransaction_ok, Snackbar.LENGTH_SHORT).show();
+                }
             } else if (resultCode == AddTransactionActivity.RESULT_ERROR) {
-                Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
-                        R.string.addTransaction_error, Snackbar.LENGTH_SHORT).show();
+                if (this.getActivity() != null) {
+                    Snackbar.make(this.getActivity().findViewById(R.id.homeLayout),
+                            R.string.addTransaction_error, Snackbar.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -88,7 +92,7 @@ public class HomeFragment extends Fragment {
             HomeFragment fragment = this.mReference.get();
             if (fragment == null) return null;
             Activity activity = fragment.getActivity();
-            if (activity.isFinishing()) return null;
+            if (activity == null || activity.isFinishing()) return null;
 
             double[] values = new double[7];
             SQLiteDatabase db = DatabaseOpenHelper.getInstance(activity).getReadableDatabase();
@@ -189,7 +193,7 @@ public class HomeFragment extends Fragment {
             HomeFragment fragment = this.mReference.get();
             if (values == null || fragment == null) return;
             Activity activity = fragment.getActivity();
-            if (activity.isFinishing()) return;
+            if (activity == null || activity.isFinishing()) return;
 
             ((TextView) activity.findViewById(R.id.balance)).setText(values[0]);
             ((TextView) activity.findViewById(R.id.balance_in)).setText(values[1]);

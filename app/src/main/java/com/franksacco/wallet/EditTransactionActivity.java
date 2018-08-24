@@ -364,9 +364,11 @@ public class EditTransactionActivity extends AppCompatActivity
         this.mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EditTransactionActivity.this,
+                DatePickerDialog dialog = new DatePickerDialog(EditTransactionActivity.this,
                         EditTransactionActivity.this, dateTime.get(Calendar.YEAR),
-                        dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
+                        dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+                dialog.show();
             }
         });
     }

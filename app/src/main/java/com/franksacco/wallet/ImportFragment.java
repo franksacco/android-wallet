@@ -1,9 +1,11 @@
 package com.franksacco.wallet;
 
+import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
@@ -12,6 +14,8 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +43,11 @@ public class ImportFragment extends Fragment {
     /**
      * Write intent request code
      */
-    private static final int READ_REQUEST_CODE = 130;
+    private static final int READ_REQUEST_CODE = 140;
+    /**
+     * Request reading permissions code
+     */
+    private static final int PERMISSION_READ_STORAGE = 141;
 
     private Button mButton;
     private ProgressBar mProgressBar;
@@ -56,13 +64,45 @@ public class ImportFragment extends Fragment {
         this.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImportFragment.this.searchFile();
+                ImportFragment.this.checkPermission();
             }
         });
-        // todo ask for storage permissions
 
         Log.i(TAG, "view created");
         return  view;
+    }
+
+    /**
+     * Check read storage permission
+     */
+    private void checkPermission() {
+        if (this.getActivity() == null) {
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(this.getActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            ImportFragment.this.searchFile();
+        } else {
+            this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_READ_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_READ_STORAGE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                this.searchFile();
+            } else {
+                new AlertDialog.Builder(this.getActivity())
+                        .setMessage(R.string.import_no_permission)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .create().show();
+            }
+        }
     }
 
     /**
@@ -90,7 +130,6 @@ public class ImportFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
     /**
      * Asynchronous task to read data from importing file and insert it in database
      */
@@ -114,8 +153,8 @@ public class ImportFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Uri... uris) {
             ImportFragment fragment = this.mFragment.get();
-            if (fragment == null || fragment.getActivity().isFinishing()
-                    || uris == null || uris.length != 1) {
+            if (fragment == null || fragment.getActivity() == null
+                    || fragment.getActivity().isFinishing() || uris == null || uris.length != 1) {
                 return false;
             }
             Uri uri = uris[0];

@@ -1,15 +1,20 @@
 package com.franksacco.wallet;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +50,10 @@ public class ExportFragment extends Fragment {
      * Write intent request code
      */
     private static final int WRITE_REQUEST_CODE = 130;
+    /**
+     * Request reading permissions code
+     */
+    private static final int PERMISSION_WRITE_STORAGE = 131;
 
     /**
      * Starting date of exporting period
@@ -79,7 +88,7 @@ public class ExportFragment extends Fragment {
                             R.string.export_errorDates, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                ExportFragment.this.createFile();
+                ExportFragment.this.checkPermission();
             }
         });
         this.mStartDate.add(Calendar.MONTH, -1);
@@ -113,11 +122,14 @@ public class ExportFragment extends Fragment {
         startDateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(ExportFragment.this.getActivity(), listener,
-                        ExportFragment.this.mStartDate.get(Calendar.YEAR),
-                        ExportFragment.this.mStartDate.get(Calendar.MONTH),
-                        ExportFragment.this.mStartDate.get(Calendar.DAY_OF_MONTH))
-                        .show();
+                if (ExportFragment.this.getActivity() != null) {
+                    new DatePickerDialog(ExportFragment.this.getActivity(), listener,
+                            ExportFragment.this.mStartDate.get(Calendar.YEAR),
+                            ExportFragment.this.mStartDate.get(Calendar.MONTH),
+                            ExportFragment.this.mStartDate.get(Calendar.DAY_OF_MONTH))
+                            .show();
+                }
+
             }
         });
     }
@@ -143,11 +155,13 @@ public class ExportFragment extends Fragment {
         endDateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(ExportFragment.this.getActivity(), listener,
-                        ExportFragment.this.mEndDate.get(Calendar.YEAR),
-                        ExportFragment.this.mEndDate.get(Calendar.MONTH),
-                        ExportFragment.this.mEndDate.get(Calendar.DAY_OF_MONTH))
-                        .show();
+                if (ExportFragment.this.getActivity() != null) {
+                    new DatePickerDialog(ExportFragment.this.getActivity(), listener,
+                            ExportFragment.this.mEndDate.get(Calendar.YEAR),
+                            ExportFragment.this.mEndDate.get(Calendar.MONTH),
+                            ExportFragment.this.mEndDate.get(Calendar.DAY_OF_MONTH))
+                            .show();
+                }
             }
         });
     }
@@ -163,6 +177,41 @@ public class ExportFragment extends Fragment {
                 ExportFragment.this.mAllData = isChecked;
             }
         });
+    }
+
+    /**
+     * Check read storage permission
+     */
+    private void checkPermission() {
+        if (ExportFragment.this.getActivity() == null) {
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(ExportFragment.this.getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            ExportFragment.this.createFile();
+        } else {
+            ActivityCompat.requestPermissions(this.getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSION_WRITE_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_WRITE_STORAGE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                this.createFile();
+            } else {
+                Log.d(TAG, "permission denied");
+                new AlertDialog.Builder(this.getActivity())
+                        .setMessage(R.string.export_no_permission)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .create().show();
+            }
+        }
     }
 
     /**
@@ -214,8 +263,8 @@ public class ExportFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Uri... uris) {
             ExportFragment fragment = this.mFragment.get();
-            if (fragment == null || fragment.getActivity().isFinishing()
-                    || uris == null || uris.length != 1) {
+            if (fragment == null || fragment.getActivity() == null
+                    || fragment.getActivity().isFinishing() || uris == null || uris.length != 1) {
                 return false;
             }
             Uri uri = uris[0];

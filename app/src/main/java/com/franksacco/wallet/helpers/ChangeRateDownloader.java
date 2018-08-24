@@ -26,7 +26,7 @@ import java.util.Calendar;
  */
 public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownloader.Result> {
 
-    private static final String TAG = "CurrencyUpdater";
+    private static final String TAG = "ChangeRateDownloader";
 
     /**
      * Url for change rates xml file
@@ -52,6 +52,11 @@ public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownlo
     private WeakReference<ChangeRateDownloaderListener> mListener;
 
     /**
+     * Recursion level for unavailable rate
+     */
+    private int mRecursionLevel = 0;
+
+    /**
      * Initialize currency updater
      * @param context Application context
      */
@@ -67,11 +72,18 @@ public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownlo
     protected Result doInBackground(Void... voids) {
         HttpURLConnection connection = null;
         Result result;
+        if (this.mRecursionLevel > 5) {
+            return new Result(new RuntimeException("Maximum level of recursion exceeded"));
+        }
         try {
             connection = this.connect();
             InputStream stream = connection.getInputStream();
             result = new Result(this.parse(stream));
             stream.close();
+        } catch (UnavailableRateException e) {
+            this.mRecursionLevel++;
+            this.referenceDate.add(Calendar.DAY_OF_MONTH, -1);
+            return this.doInBackground();
         } catch (IOException | JSONException e) {
             Log.e(TAG, e.toString());
             result = new Result(e);
@@ -146,9 +158,11 @@ public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownlo
      * Parse Json response and get change rate
      * @param input Input stream from url
      * @return Currency rate
-     * @throws IOException In an error occur with stream given
+     * @throws IOException If an error occur with stream given
+     * @throws JSONException If an error occur during stream parsing
      */
-    private Double parse(InputStream input) throws JSONException, IOException {
+    private Double parse(InputStream input)
+            throws UnavailableRateException, IOException, JSONException {
         Double rate;
         try {
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(input));
@@ -157,9 +171,19 @@ public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownlo
             while ((line = bufferedReader.readLine()) != null) {
                 result.append(line);
             }
-            JSONObject rootObject = (JSONObject) new JSONTokener(result.toString()).nextValue();
-            JSONObject rateObject = (JSONObject) rootObject.getJSONArray("rates").get(0);
-            rate = rateObject.getDouble("avgRate");
+            String body = result.toString();
+            try {
+                JSONObject rootObject = (JSONObject) new JSONTokener(body).nextValue();
+                JSONObject resultInfo = rootObject.getJSONObject("resultsInfo");
+                if (resultInfo.getInt("totalRecords") == 0) {
+                    throw new UnavailableRateException();
+                }
+                JSONObject rateObject = (JSONObject) rootObject.getJSONArray("rates").get(0);
+                rate = rateObject.getDouble("avgRate");
+            } catch (JSONException e) {
+                Log.e(TAG, "response body: " + body);
+                throw e;
+            }
         } finally {
             input.close();
         }
@@ -199,5 +223,7 @@ public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownlo
          */
         void onDownloadTerminated(Result result);
     }
+
+    private class UnavailableRateException extends Exception {}
 
 }

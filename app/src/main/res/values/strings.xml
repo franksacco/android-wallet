@@ -64,6 +64,7 @@
     <string name="import_title">Import</string>
     <string name="import_text">Select a CSV file to import</string>
     <string name="import_button">Select file</string>
+    <string name="import_no_permission">Device storage access permission is required to import a file</string>
     <string name="import_ok">Data imported with success</string>
     <string name="import_error">Error during importation</string>
 
@@ -74,6 +75,7 @@
     <string name="export_text3">Data will be exported in a CSV file</string>
     <string name="export_checkbox">Export all transactions</string>
     <string name="export_button">Export</string>
+    <string name="export_no_permission">Device storage access permission is required to export a file</string>
     <string name="export_ok">Data exported with success</string>
     <string name="export_error">Error during exportation</string>
     <string name="export_errorDates">Starting date must be before than ending date</string>

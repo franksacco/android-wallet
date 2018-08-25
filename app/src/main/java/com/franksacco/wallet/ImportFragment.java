@@ -111,7 +111,9 @@ public class ImportFragment extends Fragment {
     private void searchFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/csv");
+        intent.setType("text/comma-separated-values");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,
+                new String[]{"text/csv", "text/comma-separated-values", "application/csv"});
         this.startActivityForResult(intent, READ_REQUEST_CODE);
     }
 

@@ -142,7 +142,10 @@ public class CategoriesManager {
         SQLiteDatabase db = this.mDatabaseHelper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, values);
         db.close();
-        Log.i(TAG, "inserted category with id " + id);
+        if (id > 0) {
+            category.setId((int) id);
+            Log.i(TAG, "inserted category with id " + id);
+        }
         return id;
     }
 

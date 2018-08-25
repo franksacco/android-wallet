@@ -63,7 +63,7 @@ public class ChangeRateDownloader extends AsyncTask<Void, Void, ChangeRateDownlo
     public ChangeRateDownloader(Context context, Calendar referenceDate,
                                 String currencyCode, ChangeRateDownloaderListener listener) {
         this.mContext = new WeakReference<>(context);
-        this.referenceDate = referenceDate;
+        this.referenceDate = (Calendar) referenceDate.clone();
         this.currencyCode = currencyCode;
         this.mListener = new WeakReference<>(listener);
     }
